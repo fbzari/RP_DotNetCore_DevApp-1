@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cake.Core" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Novell.Directory.Ldap" Version="2.2.1" />
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="23.2.4" />
+    <PackageReference Include="Syncfusion.Licensing" Version="23.2.4" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+    <PackageReference Include="Vertica.Data" Version="23.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config_JSON\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Syncfusion.EJ2">
+      <HintPath>..\..\Users\devan\source\repos\DataGridDemApp\bin\Debug\net7.0\Syncfusion.EJ2.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\..\Users\devan\source\repos\DataGridDemApp\bin\Debug\net7.0\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

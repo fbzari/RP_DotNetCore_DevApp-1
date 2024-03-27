@@ -1,0 +1,2612 @@
+{
+  "Version_Number": "v8.61",
+  "override_connection_details": {
+    "host": "66.240.213.71",
+    "port": "5433",
+    "user": "VDBadmin",
+    "password": "CygnusDBA$2023",
+    "database": "VMart",
+    "ssl": false
+  },
+  "override_schema_name": "Override",
+  "bypass_login_screen": "false ",
+  "AD_Groups": "true",
+  "AD_connection_details": {
+    "host": "66.240.195.140",
+    "port": "3268",
+    "user": "Developer",
+    "password": "Cygnus$2023",
+    "domain_controller": "dc=usign,dc=com"
+  },
+  "AD_Group_Names": [
+    "invst",
+    "viper",
+    "rating"
+  ],
+  "group_name_prefix": "dna-override-",
+  "core_group_name_suffix": "-base",
+  "ldap_group_filter": "(&(objectCategory=User)(objectClass=person)(|(cn=$$USERNAME$$)(sAMAccountName=$$USERNAME$$)))",
+  "ldap_user_filter": "(&(objectClass=User)(objectCategory=Person))",
+  "invst": {
+    "brand_name": "Rating Hub",
+    "brand_name_short": "Rule",
+    "show_FieldDatatype_Icon": "20",
+    "skin": {
+      "banner_bg_color": "black",
+      "screen_bg_color": "lightgrey",
+      "normal_button_color": "0110",
+      "danger_button_color": "0110"
+    },
+    "connection_details_data_pipeline": {
+      "data_pipeline_dev": {
+        "host": "66.240.213.71",
+        "port": "5432",
+        "user": "postgres",
+        "password": "password",
+        "database": "postgres",
+        "schema_name": "dna_invst_dm",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_qa": {
+        "host": "66.240.213.71",
+        "port": "5432",
+        "user": "postgres",
+        "password": "password",
+        "database": "postgres",
+        "schema_name": "dna_invst_stg",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_prod": {
+        "host": "66.240.213.71",
+        "port": "5432",
+        "user": "postgres",
+        "password": "password",
+        "database": "postgres",
+        "schema_name": "dna_invst_prod",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "host": "66.240.213.71",
+      "port": "5432",
+      "user": "postgres",
+      "password": "password",
+      "database": "postgres",
+      "schema_name": "dna_invst",
+      "dt_rule_table_name": "dna_transformation_rule_master"
+    },
+    "transaction_connection_details": {
+      "default_connections": {
+        "source_connection": "Invst_Vertica_Eagle_DM",
+        "target_connection": "Invst_Vertica_Eagle_DM"
+      },
+      "Invst_Oracle_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Oracle",
+          "host": "66.240.213.71",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          },
+          "Create_TempTable_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      },
+      "Invst_Vertica_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Create_TempTable_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference _table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_prod",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      },
+      "Final_Server_S3": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/s3file.csv",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "s3file.csv",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "S3SourceCon": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/readme.txt",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "readme.txt",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "S3SourceCon2": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/s3file.csv",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "s3file.csv",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "TestS3aftersavebutton": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/s3file.csv",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "s3file.csv",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      }
+    },
+    "transaction_schema_name": "dna_investment_dm",
+    "derived_table_name_filter": [
+      "DERIVED"
+    ],
+    "connection_details_jira": {
+      "jira_project_url": "overrides.atlassian.net",
+      "user_id": "joji@cygnussoftwares.com",
+      "api_token": "13323Ph8bHElfFnv1jf2D1A6"
+    },
+    "jira_ticket_approve_status": "Done",
+    "jira_ticket_approve_status_qa": "qa_ready",
+    "jira_ticket_approve_status_prod": "prod_ready",
+    "jira_governance_dev": "false",
+    "jira_governance_qa": "false",
+    "jira_governance_prod": "false",
+    "enable_data_pipeline": "true",
+    "dt_rule_table_default_values": {
+      "dt_rule_id": "100",
+      "subject_area": "INVESTMENT",
+      "input_source_cd": "DERIVED",
+      "input_file_cd": "DEFAULT",
+      "transformation_type": "UPDATE",
+      "dt_rule_valid_flag": "Y",
+      "dt_rule_validity_start_dt": "$$SYSDATE$$",
+      "dt_rule_validity_end_dt": "9999-12-31",
+      "create_user_id": "$$CURRENT_USER$$",
+      "create_dt": "$$SYSDATE$$",
+      "update_user_id": "$$CURRENT_USER$$",
+      "update_dt": "$$SYSDATE$$",
+      "process_env": "VERTICA",
+      "target_path": "NA"
+    },
+    "dt_rule_table_column_names": {
+      "dt_rule_id": "dt_rule_id",
+      "subject_area": "subject_area",
+      "input_source_cd": "input_source_cd",
+      "input_file_cd": "input_file_cd",
+      "transformation_rule_seq": "transformation_rule_seq",
+      "transformation_type": "transformation_type",
+      "dt_sql_statement": "dt_sql_statement",
+      "dt_rule_valid_flag": "dt_rule_valid_flag",
+      "dt_rule_validity_start_dt": "dt_rule_validity_start_dt",
+      "dt_rule_validity_end_dt": "dt_rule_validity_end_dt",
+      "create_user_id": "create_user_id",
+      "create_dt": "create_dt",
+      "update_user_id": "update_user_id",
+      "update_dt": "update_dt",
+      "process_env": "process_env",
+      "target_path": "target_path"
+    },
+    "dt_rule_table_primary_key_columns": {
+      "dt_rule_id": "dt_rule_id"
+    },
+    "operation_group_name_map": {
+      "create": "dna-override-invst-create",
+      "delete": "dna-override-invst-delete",
+      "save": "dna-override-invst-save",
+      "run_dev": "dna-override-invst-run-dev",
+      "run_qa": "dna-override-invst-run-qa",
+      "run_prod": "dna-override-invst-run-prod",
+      "choose_rollback": "dna-override-invst-choose-rollback",
+      "run_rollback": "dna-override-invst-run-rollback",
+      "choose_jira_ticket": "dna-override-invst-choose-jira-ticket",
+      "set-direct-sql": "dna-override-invst-set-direct-sql"
+    },
+    "list_of_values_query": {
+      "RECON_HOLDING_VERTICA.COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl",
+      "DIM_ASSET_DERIVED.DERIVED_COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl"
+    },
+    "Mail_Server_Config": {
+      "SMTP_Client": "netsol-smtp-oxcs.hostingplatform.com",
+      "SMTP_Username": "bharath@prodentechnologies.net",
+      "SMTP_Password": "Bh@ProTL2k20",
+      "SMTP_Port": "587",
+      "SMTP_Enable_SSL": "true"
+    },
+    "Data_Grid_Config": {
+      "View_Transaction_History": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "select * from dna_investment_dm.Override_Transaction ot where Override_SID = $$Override_SID$$;",
+        "targetTableName": "$$TARGET_TABLE$$",
+        "primaryKeyColumn": "XXX",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "Region = @Region",
+        "IntialRowsCount": "1000"
+      },
+      "ApprovalButton": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "select * from dna_investment_dm.Override_Transaction ot where Override_SID = $$Override_SID$$;",
+        "targetTableName": "$$TARGET_TABLE$$",
+        "primaryKeyColumn": "XXX",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "Region = @Region",
+        "IntialRowsCount": "1000"
+      },
+      "Commercial_Mortage_Loans": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "SELECT Region, Apartment, Retail, Office, Industrial, HOTEL, MixedUse, Other, Total FROM $$Schema_Name$$.Commercial_Mortage_Loans",
+        "targetTableName": "Commercial_Mortage_Loans",
+        "primaryKeyColumn": "Region",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "Region = @Region",
+        "ReadOnlyColumns": {
+          "Region": "Region"
+        },
+        "DefaultValues": {
+          "Region": "my_seq.sample1"
+        }
+      },
+      "DIM_PARTY": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT, PARTY_CATEGORY_CDE, PARTY_TYPE_CDE, PARTY_COUNTRY, CARRY_VALUE FROM $$Schema_Name$$.DIM_PARTY;",
+        "targetTableName": "DIM_PARTY",
+        "primaryKeyColumn": "PARTY_ID",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "PARTY_ID = @PARTY_ID",
+        "ReadOnlyColumns": {
+          "PARTY_ID": "PARTY_ID"
+        },
+        "DefaultValues": {
+          "PARTY_ID": "my_seq.sample1"
+        }
+      },
+      "DIM_PORTFOLIO": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "SELECT PORTFOLIO_ID, EFFECTIVE_DT, PORTFOLIO_NAME, PORTFOLIO_TYPE_CDE, ENTITY_NM, PORTFOLIO_NUM, PORTFOLIO_DT, MANAGER_NAME_TXT, COMPANY_CDE, PROGRAM_SUBTYPE_NM, MANAGER_NAME_CDE, PROGRAM_SUB_SEGMENT_CDE, ACCT_BASIS_CDE, PRIMARY_ACCT_BASIS_CDE FROM $$Schema_Name$$.DIM_PORTFOLIO;",
+        "targetTableName": "DIM_PORTFOLIO",
+        "primaryKeyColumn": "PORTFOLIO_ID",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "PORTFOLIO_ID = @PORTFOLIO_ID",
+        "ReadOnlyColumns": {
+          "PORTFOLIO_ID": "PORTFOLIO_ID"
+        },
+        "DefaultValues": {
+          "PORTFOLIO_ID": "my_seq.sample1"
+        }
+      },
+      "FACT_HOLDING": {
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "DML_SQL": "SELECT FACT_HOLDING.SECURITY_ALIAS_ID, FACT_HOLDING_DERIVED.SECURITY_ALIAS_ID Holding_Derived_Security_Alis_ID, FACT_HOLDING.EFFECTIVE_DT, FACT_HOLDING_DERIVED.EFFECTIVE_DT Holding_Derived_Efective_DT, FACT_HOLDING.PORTFOLIO_REG_CAT_CDE, FACT_HOLDING.GRANULARITY_CATEGORY_CDE, FACT_HOLDING.GAAP_FOOTNOTE_CATEGORY_CDE, FACT_HOLDING.PORTFOLIO_ID, FACT_HOLDING.FACT_HOLDING_SID, FACT_HOLDING.ASSET_SID, FACT_HOLDING.CARRY_VALUE_BASE_AMT FROM $$Schema_Name$$.FACT_HOLDING LEFT JOIN $$Schema_Name$$.FACT_HOLDING_DERIVED ON $$Schema_Name$$.FACT_HOLDING.SECURITY_ALIAS_ID = $$Schema_Name$$.FACT_HOLDING_DERIVED.SECURITY_ALIAS_ID;",
+        "targetTableName": "FACT_HOLDING",
+        "primaryKeyColumn": " FACT_HOLDING_SID",
+        "SchemaName": "dna_investment_dm",
+        "whereCondition": "FACT_HOLDING_SID = @FACT_HOLDING_SID",
+        "ReadOnlyColumns": {
+          "FACT_HOLDING_SID": "FACT_HOLDING_SID"
+        },
+        "DefaultValues": {
+          "FACT_HOLDING_SID": "my_seq.sample1"
+        }
+      }
+    },
+    "SQL_Macro": {
+      "Current_User": ""
+    },
+    "List_Survey_Header": "List of Surveys",
+    "List_Question_Header": "Survey Editor - List of Questions",
+    "List_Question_NmDropDwn_Lbl": "Survey Name",
+    "List_Rules_Header": "Survey Editor - List of Rules",
+    "List_Rules_NmDropDwn_Lbl": "Question Name",
+    "Completetion_Status": [
+      "YTS",
+      "In_Progress",
+      "Completed"
+    ],
+    "List_Survey_Columns": [
+      "Icon",
+      "Name",
+      "Agency",
+      "Description",
+      "Survey Year",
+      "Release Date",
+      "Due Date",
+      "Owner",
+      "Assigned To",
+      "# of Rules",
+      "YTS",
+      "In-Progress",
+      "Completed",
+      "Version#",
+      "SQL"
+    ],
+    "List_Question_Columns": [
+      "Icon",
+      "Sequence",
+      "Question ID",
+      "Name",
+      "Description",
+      "Owner",
+      "Assigned To",
+      "Completion Status",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "SQL"
+    ],
+    "List_Rules_Columns": [
+      "Sequence",
+      "Rule ID",
+      "Name",
+      "Description",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "SQL"
+    ],
+    "Table_Column_Style_Properties": {
+      "Name": {
+        "width": "32px",
+        "tooltip": ""
+      },
+      "SQL": {
+        "width": "24px",
+        "tooltip": "Click to open the Construction SQL"
+      },
+      "Description": {
+        "width": "34px",
+        "tooltip": ""
+      },
+      "Default": {
+        "width": "20px",
+        "tooltip": ""
+      }
+    },
+    "DynamicTable_Column_Properties": {
+      "Rule Name": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showDerivationEditMode()"
+        },
+        "width": "24.3em",
+        "Text length": "50",
+        "maxWidthVal": "24.3em;"
+      },
+      "Sequence": {
+        "Type": "input",
+        "Attribute": {
+          "onchange": "Sorttargetclm(this)"
+        },
+        "width": "2.2em",
+        "height": "1.9em",
+        "maxWidthVal": "10em;"
+      },
+      "Due Date": {
+        "Type": "date",
+        "Attribute": {
+          "onchange": "dueDateChange(this)"
+        },
+        "width": "32px",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Owner": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "ownerChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Assigned To": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "userChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "SQL": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showSQl(this);"
+        },
+        "width": "24px",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Default": {
+        "width": "8em",
+        "max-height": "3.5em;",
+        "maxWidthVal": "10em;"
+      }
+    },
+    "Survey_Table_Default_Sort_Column": "Rule Name",
+    "Question_Table_Default_Sort_Column": "Sequence",
+    "Rules_Table_Default_Sort_Column": "Sequence",
+    "List_UI_Query": "select o.Override_SID, o.Override_Group,o.Override_Nm Derivation_Name,o.Run_Seq_No,isnull(o.Completion_Status, 'NA')  Completion_Status,isnull(o.Created_By, 'NA') Created_By,isnull(o.Modified_By, 'NA') Modified_By,isnull(o.Modified_Date::varchar, 'NA') Modified_Date,o.Group_ID, o.Sub_Group_ID,o.DT_Rule_Id, o.JIRA_Ticket_ID, '0' TotalNoRules, '0' YTS, '0' In_Progress, '0' Completed,isnull(o.Data_Source_1_Nm,'NA') Agency,isnull(o.Comments,'NA') Description,isnull(o.Override_Release_Dt::varchar,'NA') ReleaseDate,isnull(o.Override_Due_Dt::varchar,'NA') DueDate,isnull(o.Owner,'NA') Owner,isnull(o.Effective_Dt::varchar,'NA') SurveyYear,isnull(o.Override_Version_Num,'NA') Version_Num,isnull(o.Assigned_To,'NA') Assigned_To, isnull(om.User_Defined_Table_Nm, 'NA') User_Defined_Table_Nm, isnull(om.User_Defined_Object_Nm, 'NA') User_Defined_Object_Nm, o.Constructed_SQL, o.Logical_SQL, isnull(o.Override_Type, 'NA') Override_Type, isnull(o.Modified_By, 'NA') Modified_By, isnull(o.Created_By, 'NA') Created_By, isnull(o.Created_Date::varchar, 'NA') Created_Date, isnull(o.Reuse_Override, 'NA') Library, isnull(o.Reuse_Scope, 'NA') Reuse_Scope, o.Target_Table_Nm, OT_Recent.Transaction_Dt, OT_Recent.Transaction_Cnt Row_Count, OT_Recent.Executed_By, CASE WHEN OT_Recent.Constructed_SQL_Run_Status ILIKE '%Success!' THEN 'Success' ELSE 'Failed' END Status from $$Schema_Name$$.$$Table_Name$$ o left join ( select ot.*,row_number() over (partition by ot.Override_SID order by ot.Transaction_Dt desc) as Transaction_Num from $$Schema_Name$$.$$Transaction_History_Table$$ ot ) OT_Recent on o.Override_SID = OT_Recent.Override_SID and OT_Recent.Transaction_Num = 1 left join $$Schema_Name$$.$$Field_Map_Table$$ om on om.Database_Table_Nm = o.Database_Table_Nm and om.Database_Object_Nm = o.Database_Object_Nm and o.Override_Group = om.Override_Group and o.Target_Schema_Nm = om.Source_Schema_Nm where o.Override_Group in ('$$CoreGroup$$');",
+    "List_Main_Columns_Value_Mapping": {
+      "ID": "Override_SID",
+      "Icon": "Icon",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Rule Library": "Library",
+      "Table": "",
+      "Column": "",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Date": "",
+      "by": "",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "List_Group_Columns_Value_Mapping": {
+      "Action_Btn": "Action_Btn",
+      "ID": "Override_SID",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Rule Library": "",
+      "Table": "",
+      "Column": "",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Date": "",
+      "by": "",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "Security_Sensitivity_Comment": "// 061023 - Implements DML Security for Overrides",
+    "Security_Sensitivity": {
+      "Default_Behavior": "Hide",
+      "Sensitive": {
+        "DML_Oper_To_AD_Group_Mapping": {
+          "View": "dna-override-rating-sec-snstv-view",
+          "Edit": "dna-override-rating-sec-snstv-edit-no",
+          "Delete": "dna-override-rating-sec-snstv-delete",
+          "Run": "dna-override-rating-sec-snstv-run"
+        }
+      }
+    }
+  },
+  "viper": {
+    "brand_name": "Override Rules",
+    "brand_name_short": "Override",
+    "show_FieldDatatype_Icon": "20",
+    "connection_details_data_pipeline": {
+      "data_pipeline_dev": {
+        "host": "183.82.251.43",
+        "port": "5432",
+        "user": "postgres",
+        "password": "cyg$2021",
+        "database": "postgres",
+        "schema_name": "dna_invst_dm",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_qa": {
+        "host": "183.82.251.43",
+        "port": "5432",
+        "user": "postgres",
+        "password": "cyg$2021",
+        "database": "postgres",
+        "schema_name": "dna_invst_stg",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_prod": {
+        "host": "183.82.251.43",
+        "port": "5432",
+        "user": "postgres",
+        "password": "cyg$2021",
+        "database": "postgres",
+        "schema_name": "dna_invst_prod",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "host": "183.82.251.43",
+      "port": "5432",
+      "user": "postgres",
+      "password": "cyg$2021",
+      "database": "postgres",
+      "schema_name": "dna_viper",
+      "dt_rule_table_name": "dna_transformation_rule_master"
+    },
+    "transaction_connection_details": {
+      "default_connections": {
+        "source_connection": "Invst_Oracle_Eagle_DM",
+        "target_connection": "Invst_Vertica_Eagle_DM"
+      },
+      "Invst_Oracle_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Create_TempTable_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      },
+      "Invst_Vertica_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Vertica",
+          "host": "183.82.251.43",
+          "port": "5433",
+          "user": "dbadmin",
+          "password": "password",
+          "database": "vmart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Create_TempTable_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Vertica",
+          "host": "183.82.251.43",
+          "port": "5433",
+          "user": "dbadmin",
+          "password": "password",
+          "database": "vmart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_stg",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Vertica",
+          "host": "183.82.251.43",
+          "port": "5433",
+          "user": "dbadmin",
+          "password": "password",
+          "database": "vmart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_prod",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      }
+    },
+    "Rules_Schema_Name": "dna_investment_dm",
+    "transaction_schema_name": {
+      "dna_investment_dm": "Dm"
+    },
+    "derived_table_name_filter": [
+      "DERIVED"
+    ],
+    "connection_details_jira": {
+      "jira_project_url": "overrides.atlassian.net",
+      "user_id": "joji@cygnussoftwares.com",
+      "api_token": "13323Ph8bHElfFnv1jf2D1A6"
+    },
+    "jira_ticket_approve_status": "Done",
+    "jira_ticket_approve_status_qa": "qa_ready",
+    "jira_ticket_approve_status_prod": "prod_ready",
+    "jira_governance_dev": "false",
+    "jira_governance_qa": "false",
+    "jira_governance_prod": "false",
+    "enable_data_pipeline": "true",
+    "dt_rule_table_default_values": {
+      "dt_rule_id": "100",
+      "subject_area": "INVESTMENT",
+      "input_source_cd": "DERIVED",
+      "input_file_cd": "DEFAULT",
+      "transformation_type": "UPDATE",
+      "dt_rule_valid_flag": "Y",
+      "dt_rule_validity_start_dt": "$$SYSDATE$$",
+      "dt_rule_validity_end_dt": "9999-12-31",
+      "create_user_id": "$$CURRENT_USER$$",
+      "create_dt": "$$SYSDATE$$",
+      "update_user_id": "$$CURRENT_USER$$",
+      "update_dt": "$$SYSDATE$$",
+      "process_env": "VERTICA",
+      "target_path": "NA"
+    },
+    "dt_rule_table_column_names": {
+      "dt_rule_id": "dna_dt_rule_id",
+      "subject_area": "dna_subject_area",
+      "input_source_cd": "dna_input_source_cd",
+      "input_file_cd": "dna_input_file_cd",
+      "transformation_rule_seq": "dna_transformation_rule_seq",
+      "transformation_type": "dna_transformation_type",
+      "dt_sql_statement": "dna_dt_sql_statement",
+      "dt_rule_valid_flag": "dna_dt_rule_valid_flag",
+      "dt_rule_validity_start_dt": "dna_dt_rule_validity_start_dt",
+      "dt_rule_validity_end_dt": "dna_dt_rule_validity_end_dt",
+      "create_user_id": "dna_create_user_id",
+      "create_dt": "dna_create_dt",
+      "update_user_id": "dna_update_user_id",
+      "update_dt": "dna_update_dt",
+      "process_env": "dna_process_env",
+      "target_path": "dna_target_path"
+    },
+    "operation_group_name_map": {
+      "create": "dna-override-viper-create",
+      "delete": "dna-override-viper-delete",
+      "save": "dna-override-viper-save",
+      "run_dev": "dna-override-viper-run-dev",
+      "run_qa": "dna-override-viper-run-qa",
+      "run_prod": "dna-override-viper-run-prod",
+      "choose_rollback": "dna-override-viper-choose-rollback",
+      "run_rollback": "dna-override-viper-run-rollback",
+      "choose_jira_ticket": "dna-override-viper-choose-jira-ticket"
+    },
+    "list_of_values_query": {
+      "RECON_HOLDING_VERTICA.COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl",
+      "DIM_ASSET_DERIVED.DERIVED_COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl"
+    },
+    "Mail_Server_Config": {
+      "SMTP_Client": "netsol-smtp-oxcs.hostingplatform.com",
+      "SMTP_Username": "bharath@prodentechnologies.net",
+      "SMTP_Password": "Bh@ProTL2k20",
+      "SMTP_Port": "587",
+      "SMTP_Enable_SSL": "true"
+    },
+    "List_Survey_Header": "List of Surveys",
+    "List_Question_Header": "Survey Editor - List of Questions",
+    "List_Question_NmDropDwn_Lbl": "Survey Name",
+    "List_Rules_Header": "Survey Editor - List of Rules",
+    "List_Rules_NmDropDwn_Lbl": "Question Name",
+    "Completetion_Status": [
+      "YTS",
+      "In_Progress",
+      "Completed"
+    ],
+    "List_Survey_Columns": [
+      "Survey_Name",
+      "Agency",
+      "Description",
+      "Survey Year",
+      "Release Date",
+      "Due Date",
+      "Owner",
+      "Assigned To",
+      "# of Rules",
+      "YTS",
+      "In-Progress",
+      "Completed",
+      "Version#",
+      "SQL"
+    ],
+    "List_Question_Columns": [
+      "Question_ID",
+      "Name",
+      "Description",
+      "Owner",
+      "Assigned To",
+      "Completion Status",
+      "Target Connection",
+      "Target Schema",
+      "Target Table",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "List_Rules_Columns": [
+      "Rule_ID",
+      "Name",
+      "Description",
+      "Target Connection",
+      "Target Schema",
+      "Target Table",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "Table_Column_Style_Properties": {
+      "Name": {
+        "width": "32px",
+        "tooltip": ""
+      },
+      "SQL": {
+        "width": "24px",
+        "tooltip": "Click to open the Construction SQL"
+      },
+      "Description": {
+        "width": "34px",
+        "tooltip": ""
+      },
+      "Default": {
+        "width": "20px",
+        "tooltip": ""
+      }
+    },
+    "DynamicTable_Column_Properties": {
+      "Rule Name": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showDerivationEditMode()"
+        },
+        "width": "24.3em",
+        "Text length": "50",
+        "maxWidthVal": "24.3em;"
+      },
+      "Sequence": {
+        "Type": "input",
+        "Attribute": {
+          "onchange": "Sorttargetclm(this)"
+        },
+        "width": "2.2em",
+        "height": "1.9em",
+        "maxWidthVal": "10em;"
+      },
+      "Due Date": {
+        "Type": "date",
+        "Attribute": {
+          "onchange": "dueDateChange(this)"
+        },
+        "width": "32px",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Owner": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "ownerChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Assigned To": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "userChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "SQL": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showSQl(this);"
+        },
+        "width": "24px",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Default": {
+        "width": "8em",
+        "max-height": "3.5em;",
+        "maxWidthVal": "10em;"
+      }
+    },
+    "Survey_Table_Default_Sort_Column": "Rule Name",
+    "Question_Table_Default_Sort_Column": "Sequence",
+    "Rules_Table_Default_Sort_Column": "Sequence",
+    "List_UI_Query": "select o.Override_SID, o.Override_Group,o.Override_Nm Derivation_Name,o.Run_Seq_No,isnull(o.Completion_Status, 'NA')  Completion_Status,isnull(o.Created_By, 'NA') Created_By,isnull(o.Modified_By, 'NA') Modified_By,isnull(o.Modified_Date::varchar, 'NA') Modified_Date,o.Group_ID, o.Sub_Group_ID,o.DT_Rule_Id, o.JIRA_Ticket_ID, '0' TotalNoRules, '0' YTS, '0' In_Progress, '0' Completed,isnull(o.Data_Source_1_Nm,'NA') Agency,isnull(o.Comments,'NA') Description,isnull(o.Override_Release_Dt::varchar,'NA') ReleaseDate,isnull(o.Override_Due_Dt::varchar,'NA') DueDate,isnull(o.Owner,'NA') Owner,isnull(o.Effective_Dt::varchar,'NA') SurveyYear,isnull(o.Override_Version_Num,'NA') Version_Num,isnull(o.Assigned_To,'NA') Assigned_To, isnull(om.User_Defined_Table_Nm, 'NA') User_Defined_Table_Nm, isnull(om.User_Defined_Object_Nm, 'NA') User_Defined_Object_Nm, o.Constructed_SQL, o.Logical_SQL, isnull(o.Override_Type, 'NA') Override_Type, isnull(o.Modified_By, 'NA') Modified_By, isnull(o.Created_By, 'NA') Created_By, isnull(o.Created_Date::varchar, 'NA') Created_Date, isnull(o.Reuse_Override, 'NA') Library, isnull(o.Reuse_Scope, 'NA') Reuse_Scope, o.Target_Table_Nm, OT_Recent.Transaction_Dt, OT_Recent.Transaction_Cnt Row_Count, OT_Recent.Executed_By, CASE WHEN OT_Recent.Constructed_SQL_Run_Status ILIKE '%Success!' THEN 'Success' ELSE 'Failed' END Status from $$Schema_Name$$.$$Table_Name$$ o left join ( select ot.*,row_number() over (partition by ot.Override_SID order by ot.Transaction_Dt desc) as Transaction_Num from $$Schema_Name$$.$$Transaction_History_Table$$ ot ) OT_Recent on o.Override_SID = OT_Recent.Override_SID and OT_Recent.Transaction_Num = 1 left join $$Schema_Name$$.$$Field_Map_Table$$ om on om.Database_Table_Nm = o.Database_Table_Nm and om.Database_Object_Nm = o.Database_Object_Nm and o.Override_Group = om.Override_Group and o.Target_Schema_Nm = om.Source_Schema_Nm where o.Override_Group in ('$$CoreGroup$$');",
+    "List_Main_Columns_Value_Mapping": {
+      "ID": "Override_SID",
+      "Icon": "Icon",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Rule Library": "Library",
+      "Table": "",
+      "Column": "",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Date": "",
+      "by": "",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "List_Group_Columns_Value_Mapping": {
+      "Action_Btn": "Action_Btn",
+      "ID": "Override_SID",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Rule Library": "",
+      "Table": "",
+      "Column": "",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Date": "",
+      "by": "",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "Security_Sensitivity_Comment": "// 061023 - Implements DML Security for Overrides",
+    "Security_Sensitivity": {
+      "Default_Behavior": "Hide",
+      "Sensitive": {
+        "DML_Oper_To_AD_Group_Mapping": {
+          "View": "dna-override-rating-sec-snstv-view",
+          "Edit": "dna-override-rating-sec-snstv-edit-no",
+          "Delete": "dna-override-rating-sec-snstv-delete",
+          "Run": "dna-override-rating-sec-snstv-run"
+        }
+      }
+    }
+  },
+  "default": {
+    "brand_name": "Rating Hub",
+    "brand_name_short": "Rule",
+    "show_FieldDatatype_Icon": "20",
+    "connection_details_data_pipeline": {
+      "host": "183.82.251.43",
+      "port": "5432",
+      "user": "postgres",
+      "password": "cyg$2021",
+      "database": "postgres",
+      "schema_name": "dna_default",
+      "dt_rule_table_name": "dna_transformation_rule_master"
+    },
+    "transaction_connection_details": {
+      "default_connections": {
+        "source_connection": "Invst_Vertica_Eagle_DM",
+        "target_connection": "Invst_Vertica_Eagle_DM"
+      },
+      "Invst_Oracle_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          }
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          }
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      },
+      "Invst_Vertica_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$') union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          },
+          "Create_TempTable_Sql": "CREATE TABLE IF NOT EXISTS $$Schema_Name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE IF NOT EXISTS $$Schema_Name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Vertica",
+          "host": "183.82.251.43",
+          "port": "5433",
+          "user": "dbadmin",
+          "password": "password",
+          "database": "vmart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Vertica",
+          "host": "183.82.251.43",
+          "port": "5433",
+          "user": "dbadmin",
+          "password": "password",
+          "database": "vmart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name, cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$' ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$' ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      }
+    },
+    "derived_table_name_filter": [
+      "DERIVED"
+    ],
+    "connection_details_jira": {
+      "jira_project_url": "overrides.atlassian.net",
+      "user_id": "joji@cygnussoftwares.com",
+      "api_token": "13323Ph8bHElfFnv1jf2D1A6"
+    },
+    "jira_ticket_approve_status": "Done",
+    "jira_governance_dev": "true",
+    "jira_governance_qa": "true",
+    "jira_governance_prod": "true",
+    "enable_data_pipeline": "true",
+    "dt_rule_table_default_values": {
+      "dt_rule_id": "100",
+      "subject_area": "INVESTMENT",
+      "input_source_cd": "DERIVED",
+      "input_file_cd": "DEFAULT",
+      "transformation_type": "UPDATE",
+      "dt_rule_valid_flag": "Y",
+      "dt_rule_validity_start_dt": "$$SYSDATE$$",
+      "dt_rule_validity_end_dt": "9999-12-31",
+      "create_user_id": "$$CURRENT_USER$$",
+      "create_dt": "$$SYSDATE$$",
+      "update_user_id": "$$CURRENT_USER$$",
+      "update_dt": "$$SYSDATE$$",
+      "process_env": "VERTICA",
+      "target_path": "NA"
+    },
+    "dt_rule_table_column_names": {
+      "dt_rule_id": "dna_dt_rule_id",
+      "subject_area": "dna_subject_area",
+      "input_source_cd": "dna_input_source_cd",
+      "input_file_cd": "dna_input_file_cd",
+      "transformation_rule_seq": "dna_transformation_rule_seq",
+      "transformation_type": "dna_transformation_type",
+      "dt_sql_statement": "dna_dt_sql_statement",
+      "dt_rule_valid_flag": "dna_dt_rule_valid_flag",
+      "dt_rule_validity_start_dt": "dna_dt_rule_validity_start_dt",
+      "dt_rule_validity_end_dt": "dna_dt_rule_validity_end_dt",
+      "create_user_id": "dna_create_user_id",
+      "create_dt": "dna_create_dt",
+      "update_user_id": "dna_update_user_id",
+      "update_dt": "dna_update_dt",
+      "process_env": "dna_process_env",
+      "target_path": "dna_target_path"
+    },
+    "operation_group_name_map": {
+      "create": "dna-override-viper-create",
+      "delete": "dna-override-viper-delete",
+      "save": "dna-override-viper-save",
+      "run_dev": "dna-override-viper-run-dev",
+      "run_qa": "dna-override-viper-run-qa",
+      "run_prod": "dna-override-viper-run-prod",
+      "choose_rollback": "dna-override-viper-choose-rollback",
+      "run_rollback": "dna-override-viper-run-rollback",
+      "choose_jira_ticket": "dna-override-viper-choose-jira-ticket"
+    },
+    "list_of_values_query": {
+      "RECON_HOLDING_VERTICA.COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl",
+      "DIM_ASSET_DERIVED.DERIVED_COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl"
+    },
+    "Mail_Server_Config": {
+      "SMTP_Client": "netsol-smtp-oxcs.hostingplatform.com",
+      "SMTP_Username": "bharath@prodentechnologies.net",
+      "SMTP_Password": "Bh@ProTL2k20",
+      "SMTP_Port": "587",
+      "SMTP_Enable_SSL": "true"
+    },
+    "List_Survey_Header": "List of Surveys",
+    "List_Question_Header": "Survey Editor - List of Questions",
+    "List_Question_NmDropDwn_Lbl": "Survey Name",
+    "List_Rules_Header": "Survey Editor - List of Rules",
+    "List_Rules_NmDropDwn_Lbl": "Question Name",
+    "Completetion_Status": [
+      "YTS",
+      "In_Progress",
+      "Completed"
+    ],
+    "List_Survey_Columns": [
+      "Survey_Name",
+      "Agency",
+      "Description",
+      "Survey Year",
+      "Release Date",
+      "Due Date",
+      "Owner",
+      "Assigned To",
+      "# of Rules",
+      "YTS",
+      "In-Progress",
+      "Completed",
+      "Version#",
+      "SQL"
+    ],
+    "List_Question_Columns": [
+      "Question_ID",
+      "Name",
+      "Description",
+      "Owner",
+      "Assigned To",
+      "Completion Status",
+      "Target Connection",
+      "Target Schema",
+      "Target Table",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "List_Rules_Columns": [
+      "Rule_ID",
+      "Name",
+      "Description",
+      "Target Connection",
+      "Target Schema",
+      "Target Table",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "Table_Column_Style_Properties": {
+      "Name": {
+        "width": "32px",
+        "tooltip": ""
+      },
+      "SQL": {
+        "width": "24px",
+        "tooltip": "Click to open the Construction SQL"
+      },
+      "Description": {
+        "width": "34px",
+        "tooltip": ""
+      },
+      "Default": {
+        "width": "20px",
+        "tooltip": ""
+      }
+    },
+    "Survey_Table_Default_Sort_Column": "Agency",
+    "Question_Table_Default_Sort_Column": "Sequence",
+    "Rules_Table_Default_Sort_Column": "Sequence",
+    "Edit_Rule": {
+      "custom_Buttons": {
+        "View Target Table": {
+          "visible": "true",
+          "URL": "DataRule.aspx?SQL=View_Target_Table_SQL&Override_SID=$$Override_SID$$&Table=$$Table_NM$$",
+          "Popup": "Yes",
+          "name": "View Target Table"
+        }
+      }
+    },
+    "Security_Sensitivity_Comment": "// 061023 - Implements DML Security for Overrides",
+    "Security_Sensitivity": {
+      "Default_Behavior": "Hide",
+      "Sensitive": {
+        "DML_Oper_To_AD_Group_Mapping": {
+          "View": "dna-override-rating-sec-snstv-view",
+          "Edit": "dna-override-rating-sec-snstv-edit-no",
+          "Delete": "dna-override-rating-sec-snstv-delete",
+          "Run": "dna-override-rating-sec-snstv-run"
+        }
+      }
+    }
+  },
+  "rating": {
+    "brand_name": "Rating",
+    "brand_name_short": "Rule",
+    "show_FieldDatatype_Icon": "20",
+    "skin": {
+      "banner_bg_color": "black",
+      "screen_bg_color": "lightgrey",
+      "normal_button_color": "0110",
+      "danger_button_color": "0110"
+    },
+    "connection_details_data_pipeline": {
+      "data_pipeline_dev": {
+        "host": "66.240.213.71",
+        "port": "5432",
+        "user": "postgres",
+        "password": "#DBPost@2k23$",
+        "database": "postgres",
+        "schema_name": "dna_invest",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_qa": {
+        "host": "183.82.251.43",
+        "port": "5432",
+        "user": "postgres",
+        "password": "cyg$2021",
+        "database": "postgres",
+        "schema_name": "dna_invst_stg",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "data_pipeline_prod": {
+        "host": "183.82.251.43",
+        "port": "5432",
+        "user": "postgres",
+        "password": "cyg$2021",
+        "database": "postgres",
+        "schema_name": "dna_invst_prod",
+        "dt_rule_table_name": "dna_transformation_rule_master"
+      },
+      "host": "183.82.251.43",
+      "port": "5432",
+      "user": "postgres",
+      "password": "cyg$2021",
+      "database": "postgres",
+      "schema_name": "dna_invst",
+      "dt_rule_table_name": "dna_transformation_rule_master"
+    },
+    "transaction_connection_details": {
+      "default_connections": {
+        "source_connection": "Invst_Vertica_Eagle_DM",
+        "target_connection": "Invst_Vertica_Eagle_DM"
+      },
+      "Invst_Oracle_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "orcl",
+          "user": "INVDATAMART",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          },
+          "Create_TempTable_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          }
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Oracle",
+          "host": "183.82.251.43",
+          "port": "1521",
+          "service_name": "ORCL",
+          "user": "SYS as SYSDBA",
+          "password": "Cygnus$2023",
+          "Rules_Schema_Name": "INVDATAMART",
+          "transaction_schema_name": {
+            "INVDATAMART": "INVDM"
+          },
+          "db_provider": "Oracle.ManagedDataAccess.Client",
+          "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+          "field_map_sql": "SELECT COLUMN_ID Override_Object_Map_SID, COLUMN_NAME User_Defined_Object_Nm, COLUMN_NAME Database_Object_Nm, 'Field' Object_Type, TABLE_NAME User_Defined_Table_Nm, TABLE_NAME Database_Table_Nm,OWNER Source_Schema_Nm FROM all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') ORDER BY table_name",
+          "table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER  in ('$$transaction_schema_name$$') and TABLE_NAME = '$$Table_Name$$' order by TABLE_NAME",
+          "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ('$$transaction_schema_name$$') order by table_name",
+          "table_joins": "SELECT a.table_name, a.column_name, c_pk.table_name reference_table_name, b.column_name reference_column_name FROM user_cons_columns a JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner in ('$$transaction_schema_name$$')",
+          "table_joins_distinct": "SELECT  a.table_name, c_pk.table_name reference_table_name, a.POSITION fk_cols, b.POSITION pk_cols, case when a.POSITION = b.POSITION then '1->1' else '*->1' end j_cardinality FROM user_cons_columns a INNER JOIN user_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name INNER JOIN user_constraints c_pk ON c.r_owner = c_pk.owner AND c.r_constraint_name = c_pk.constraint_name INNER JOIN user_cons_columns b ON C_PK.owner = b.owner AND C_PK.CONSTRAINT_NAME = b.constraint_name AND b.POSITION = a.POSITION WHERE c.constraint_type = 'R' AND a.owner='$$transaction_schema_name$$'",
+          "Use_Columns_with_Same_Name_in_Joins": false
+        }
+      },
+      "Invst_Vertica_Eagle_DM": {
+        "connection_details_dev": {
+          "env": "dev",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          },
+          "Create_TempTable_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);",
+          "Create_Table_Sql": "CREATE TABLE IF NOT EXISTS $$transaction_schema_name$$.$$Table_Name$$ ($$Columns$$);"
+        },
+        "connection_details_qa": {
+          "env": "qa",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_dm",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference _table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          }
+        },
+        "connection_details_prod": {
+          "env": "prod",
+          "vendor_name": "Vertica",
+          "host": "66.240.213.71",
+          "port": "5433",
+          "user": "VDBadmin",
+          "password": "CygnusDBA$2023",
+          "database": "VMart",
+          "ssl": false,
+          "Rules_Schema_Name": "dna_investment_prod",
+          "transaction_schema_name": {
+            "dna_investment_dm": "Dm"
+          },
+          "db_provider": "",
+          "conn_string": "",
+          "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm,table_schema Source_Schema_Nm FROM v_catalog.columns c where table_schema in ('$$transaction_schema_name$$') and table_name not in (select distinct Database_Table_Nm from $$override_schema_name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm,Source_Schema_Nm from $$override_schema_name$$.Override_object_Map where Override_Group = '$$Override_Group$$'",
+          "table_columns_sql": "SELECT table_name, column_name, data_type FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') and table_name = '$$Table_Name$$' order by column_name",
+          "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ('$$transaction_schema_name$$') order by column_name",
+          "table_joins": "select cc.table_name, cc.column_name, cc.reference_table_name, cc.reference_column_name from v_catalog.constraint_columns cc  inner join v_catalog.table_constraints tc on cc.constraint_id = tc.constraint_id inner join (select distinct Database_Table_Nm from $$rule_schema_name$$.Override_object_Map where Database_Table_Nm is not null and Override_Group = '$$Override_Group$$' ) fm on cc.table_name = fm.Database_Table_Nm where cc.reference_table_name is not null union select otj.table_name, otj.column_name, otj.reference_table_name, otj.reference_column_name from $$rule_schema_name$$.Override_Table_Join otj where otj.Override_Group = '$$Override_Group$$' order by 1,3;",
+          "table_joins_distinct": "select distinct cc.table_name,   cc.reference_table_name,  join_type.fk_cols, join_type.pk_cols, case  when join_type.fk_cols = join_type.pk_cols then '1->1' else '*->1'  end j_cardinality from v_catalog.constraint_columns cc inner join v_catalog.table_constraints tc on  cc.constraint_id = tc.constraint_id inner join (  select   distinct Database_Table_Nm  from  $$rule_schema_name$$.Override_object_Map  where  Database_Table_Nm is not null and Override_Group = '$$Override_Group$$') fm on cc.table_name = fm.Database_Table_Nm left join ( select fk.reference_table_name, fk.table_name, count(fk.table_name) fk_cols, count(pk.column_name) pk_cols from ( select cc.table_name, column_name, reference_table_name, reference_column_name from  v_catalog.constraint_columns cc where constraint_type = 'f'  and table_schema in ('$$transaction_schema_name$$') ) fk  left join ( select  cc.table_name, cc.column_name from  v_catalog.constraint_columns cc where   constraint_type = 'p'  and table_schema in ('$$transaction_schema_name$$') ) pk on fk.table_name = pk.table_name and fk.column_name = pk.column_name  group by  fk.reference_table_name, fk.table_name) join_type on cc.reference_table_name = join_type.reference_table_name and cc.table_name = join_type.table_name where cc.reference_table_name is not null and cc.constraint_type = 'f' and table_schema in ('$$transaction_schema_name$$') order by cc.Table_Name, cc.reference_table_name;",
+          "Use_Columns_with_Same_Name_in_Joins": false,
+          "Use_Columns_with_Same_Name_in_Joins_Excludes": {
+            "from_all_tables": ""
+          }
+        }
+      },
+      "Final_Server_S3": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/s3file.csv",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "s3file.csv",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "S3SourceCon": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/readme.txt",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "readme.txt",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "S3SourceCon2": {
+        "connection_type": "source_filetarget",
+        "connection": "source",
+        "s3_url": "s3://rulesons3/s3file.csv",
+        "s3_region": "ap-south-1",
+        "s3_access_key": "AKIAXV5IK7OUGBHBQ34V",
+        "s3_secret_key": "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",
+        "s3_selected_bucket": "rulesons3",
+        "s3_selected_source_file": "s3file.csv",
+        "s3_selected_source_file_type": null,
+        "selected_connection": null,
+        "selected_schema": null,
+        "selected_table": null
+      },
+      "Local_File_Conn": {
+        "connection_type": "source_filetarget",
+        "connection": "Local",
+        "Connection_name": "Local_File_Conn",
+        "local_file": "Sample100.csv",
+        "Path": "C:\\Users\\devan\\Downloads\\Sample100.csv",
+        "Target_Table_Name": "DIM_TEMP_DERIVED",
+        "UseHeader": "false",
+        "Selected_Connection": "Invst_Vertica_Eagle_DM",
+        "Seleceted_Schema": "dna_investment_dm",
+        "Create_Target_Table": "false"
+      }
+    },
+    "transaction_schema_name": "dna_investment_dm",
+    "derived_table_name_filter": [
+      "DERIVED"
+    ],
+    "connection_details_jira": {
+      "jira_project_url": "overrides.atlassian.net",
+      "user_id": "joji@cygnussoftwares.com",
+      "api_token": "13323Ph8bHElfFnv1jf2D1A6"
+    },
+    "jira_ticket_approve_status": "Done",
+    "jira_governance_dev": "false",
+    "jira_governance_qa": "false",
+    "jira_governance_prod": "false",
+    "enable_data_pipeline": "true",
+    "dt_rule_table_default_values": {
+      "dt_rule_id": "100",
+      "subject_area": "INVESTMENT",
+      "input_source_cd": "DERIVED",
+      "input_file_cd": "DEFAULT",
+      "transformation_type": "UPDATE",
+      "dt_rule_valid_flag": "Y",
+      "dt_rule_validity_start_dt": "$$SYSDATE$$",
+      "dt_rule_validity_end_dt": "9999-12-31",
+      "create_user_id": "$$CURRENT_USER$$",
+      "create_dt": "$$SYSDATE$$",
+      "update_user_id": "$$CURRENT_USER$$",
+      "update_dt": "$$SYSDATE$$",
+      "process_env": "VERTICA",
+      "target_path": "NA"
+    },
+    "dt_rule_table_column_names": {
+      "dt_rule_id": "dt_rule_id",
+      "subject_area": "subject_area",
+      "input_source_cd": "input_source_cd",
+      "input_file_cd": "input_file_cd",
+      "transformation_rule_seq": "transformation_rule_seq",
+      "transformation_type": "transformation_type",
+      "dt_sql_statement": "dt_sql_statement",
+      "dt_rule_valid_flag": "dt_rule_valid_flag",
+      "dt_rule_validity_start_dt": "dt_rule_validity_start_dt",
+      "dt_rule_validity_end_dt": "dt_rule_validity_end_dt",
+      "create_user_id": "create_user_id",
+      "create_dt": "create_dt",
+      "update_user_id": "update_user_id",
+      "update_dt": "update_dt",
+      "process_env": "process_env",
+      "target_path": "target_path"
+    },
+    "dt_rule_table_primary_key_columns": {
+      "dt_rule_id": "dt_rule_id"
+    },
+    "operation_group_name_map": {
+      "create": "dna-override-rating-create",
+      "delete": "dna-override-rating-delete",
+      "save": "dna-override-rating-save",
+      "run_dev": "dna-override-rating-run-dev",
+      "run_qa": "dna-override-rating-run-qa",
+      "run_prod": "dna-override-rating-run-prod",
+      "choose_rollback": "dna-override-rating-choose-rollback",
+      "run_rollback": "dna-override-rating-run-rollback",
+      "choose_jira_ticket": "dna-override-rating-choose-jira-ticket",
+      "set-direct-sql": "dna-override-rating-set-direct-sql"
+    },
+    "list_of_values_query": {
+      "RECON_HOLDING_VERTICA.COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl",
+      "DIM_ASSET_DERIVED.DERIVED_COUNTRY_OF_ISSUE_NM": "select country_nm from dna_investment_dm.country_tbl"
+    },
+    "Mail_Server_Config": {
+      "SMTP_Client": "netsol-smtp-oxcs.hostingplatform.com",
+      "SMTP_Username": "bharath@prodentechnologies.net",
+      "SMTP_Password": "Bh@ProTL2k23$",
+      "SMTP_Port": "587",
+      "SMTP_Enable_SSL": "true"
+    },
+    "Data_Grid_Config": {
+      "General_Config": {
+        "General_Config_Comment": "// 081023 Added Data_Grid_Date_Format & Data_Grid_Decimal_Format",
+        "Data_Grid_Date_Format": "dd-MM-yyyy",
+        "Data_Grid_Decimal_Format": "N2",
+        "Numeric_Col_Align": "Right"
+      },
+      "ApprovalButton": {
+        "ApprovalButton": {
+          "RowNum": "1",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel"
+          ],
+          "DML_SQL": "SELECT $$columnName$$ FROM $$Schema_Name$$.$$TableName$$;",
+          "SchemaName": "dna_investment_dm"
+        }
+      },
+      "DIM_PARTY": {
+        "DIM_PARTY_12": {
+          "RowNum": "1",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel"
+          ],
+          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT, PARTY_CATEGORY_CDE, PARTY_TYPE_CDE, PARTY_COUNTRY, CARRY_VALUE FROM $$Schema_Name$$.DIM_PARTY;",
+          "targetTableName": "DIM_PARTY",
+          "primaryKeyColumn": "PARTY_ID",
+          "SchemaName": "dna_investment_dm",
+          "whereCondition": "PARTY_ID = @PARTY_ID",
+          "ColumnHeaderText": {
+            "PARTY_ID": "PARTY ID",
+            "EFFECTIVE_DT": "EFFECTIVE DT",
+            "Industry_Sector_Txt": "Industry Sector",
+            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
+          },
+          "Link_Columns": {
+            "PARTY_CATEGORY_CDE": {
+              "ConfigLink": "DIM_PARTY",
+              "Where_condition_Column": [
+                "PARTY_ID"
+              ],
+              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            }
+          }
+        },
+        "DIM_PARTY_1": {
+          "RowNum": "2",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel"
+          ],
+          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT FROM $$Schema_Name$$.DIM_PARTY;",
+          "targetTableName": "DIM_PARTY",
+          "primaryKeyColumn": "PARTY_ID",
+          "SchemaName": "dna_investment_dm",
+          "whereCondition": "PARTY_ID = @PARTY_ID",
+          "ColumnHeaderText": {
+            "PARTY_ID": "PARTY ID",
+            "EFFECTIVE_DT": "EFFECTIVE DT",
+            "Industry_Sector_Txt": "Industry Sector",
+            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
+          },
+          "Link_Columns": {
+            "PARTY_CATEGORY_CDE": {
+              "ConfigLink": "DIM_PARTY",
+              "Where_condition_Column": [
+                "PARTY_ID"
+              ],
+              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            }
+          }
+        },
+        "DIM_PARTY_2": {
+          "RowNum": "2",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel"
+          ],
+          "DML_SQL": "SELECT PARTY_ID, PARTY_CATEGORY_CDE FROM $$Schema_Name$$.DIM_PARTY;",
+          "targetTableName": "DIM_PARTY",
+          "primaryKeyColumn": "PARTY_ID",
+          "SchemaName": "dna_investment_dm",
+          "whereCondition": "PARTY_ID = @PARTY_ID",
+          "ColumnHeaderText": {
+            "PARTY_ID": "PARTY ID",
+            "EFFECTIVE_DT": "EFFECTIVE DT",
+            "Industry_Sector_Txt": "Industry Sector",
+            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
+          },
+          "Link_Columns": {
+            "PARTY_CATEGORY_CDE": {
+              "ConfigLink": "DIM_PARTY",
+              "Where_condition_Column": [
+                "PARTY_ID"
+              ],
+              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            }
+          }
+        }
+      },
+      "DIM_PARTY_UPDATE": {
+        "DIM_PARTY": {
+          "RowNum": "1",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel"
+          ],
+          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT, PARTY_CATEGORY_CDE, PARTY_TYPE_CDE, PARTY_COUNTRY, CARRY_VALUE FROM $$Schema_Name$$.DIM_PARTY WHERE PARTY_COUNTRY = 'Nepal';",
+          "targetTableName": "DIM_PARTY",
+          "primaryKeyColumn": "PARTY_ID",
+          "SchemaName": "dna_investment_dm",
+          "whereCondition": "PARTY_ID = @PARTY_ID",
+          "ColumnHeaderText": {
+            "PARTY_ID": "PARTY ID",
+            "EFFECTIVE_DT": "EFFECTIVE DT",
+            "Industry_Sector_Txt": "Industry Sector",
+            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
+          },
+          "Link_Columns": {
+            "PARTY_CATEGORY_CDE": {
+              "ConfigLink": "DIM_PARTY",
+              "Where_condition_Column": [
+                "PARTY_ID"
+              ],
+              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            }
+          }
+        }
+      }
+    },
+    "SQL_Macro": {
+      "Current_User": ""
+    },
+    "List_Survey_Header": "List of Surveys",
+    "List_Question_Header": "Survey Editor - List of Questions",
+    "List_Question_NmDropDwn_Lbl": "Survey Name",
+    "List_Rules_Header": "Survey Editor - List of Rules",
+    "List_Rules_NmDropDwn_Lbl": "Question Name",
+    "Completetion_Status": [
+      "YTS",
+      "In_Progress",
+      "Completed"
+    ],
+    "List_Survey_Columns": [
+      "Icon",
+      "Rule Name",
+      "Agency",
+      "Description",
+      "Survey Year",
+      "Release Date",
+      "Due Date",
+      "Owner",
+      "Assigned To",
+      "# of Rules",
+      "YTS",
+      "In-Progress",
+      "Completed",
+      "Version#",
+      "SQL"
+    ],
+    "List_Question_Columns": [
+      "Icon",
+      "Sequence",
+      "Question_ID",
+      "Name",
+      "Description",
+      "Owner",
+      "Assigned To",
+      "Completion Status",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "List_Rules_Columns": [
+      "Sequence",
+      "Rule_ID",
+      "Name",
+      "Description",
+      "Target Connection",
+      "Target Schema",
+      "Target Table",
+      "Created By",
+      "Modified By",
+      "Modified Date",
+      "Status",
+      "Row Count",
+      "SQL"
+    ],
+    "Table_Column_Style_Properties": {
+      "Rule Name": {
+        "width": "20em"
+      },
+      "Name": {
+        "width": "32px",
+        "tooltip": ""
+      },
+      "SQL": {
+        "width": "24px",
+        "tooltip": "Click to open the Construction SQL"
+      },
+      "Description": {
+        "width": "34px",
+        "tooltip": ""
+      },
+      "Default": {
+        "width": "20px",
+        "tooltip": ""
+      }
+    },
+    "DynamicTable_Column_Properties": {
+      "Rule Name": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showDerivationEditMode()"
+        },
+        "width": "24.3em",
+        "Text length": "50",
+        "maxWidthVal": "24.3em;"
+      },
+      "Sequence": {
+        "Type": "input",
+        "Attribute": {
+          "onchange": "Sorttargetclm(this)"
+        },
+        "width": "2.2em",
+        "height": "1.9em",
+        "maxWidthVal": "10em;"
+      },
+      "Due Date": {
+        "Type": "date",
+        "Attribute": {
+          "onchange": "dueDateChange(this)"
+        },
+        "width": "32px",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Owner": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "ownerChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "Assigned To": {
+        "Type": "select",
+        "Source": "return getUserDropdown();",
+        "Attribute": {
+          "onchange": "userChangeDropDwn(this)"
+        },
+        "width": "8em",
+        "Text length": "50",
+        "maxWidthVal": "10em;"
+      },
+      "SQL": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "showSQl(this);"
+        },
+        "width": "24px",
+        "Text length": "50",
+        "maxWidthVal": "10em;",
+        "innerText": "SQL"
+      },
+      "Notify Owner": {
+        "Type": "a",
+        "Attribute": {
+          "onclick": "setShowRemainderEmailclick(this, 'Owner');"
+        },
+        "width": "24px",
+        "Text length": "50",
+        "maxWidthVal": "10em;",
+        "innerText": "Notify Owner",
+        "SourceColumn": "Owner"
+      },
+      "Default": {
+        "width": "8em",
+        "max-height": "3.5em;",
+        "maxWidthVal": "10em;"
+      }
+    },
+    "Survey_Table_Default_Sort_Column": "Rule Name",
+    "Question_Table_Default_Sort_Column": "Sequence",
+    "Rules_Table_Default_Sort_Column": "Sequence",
+    "List_UI_Query": "select o.Override_SID Override_SID, o.Override_Group,o.Override_Nm Derivation_Name,o.Target_Table_Nm Target_Table_UI,o.Target_Connection_ID Target_Connection_ID,o.Target_Schema_Nm Target_Schema_Nm, o.Run_Seq_No,isnull(o.Completion_Status, 'NA')  Completion_Status,isnull(o.Created_By, 'NA') Created_By,isnull(o.Modified_By, 'NA') Modified_By,isnull(o.Modified_Date::varchar, 'NA') Modified_Date,o.Group_ID, o.Sub_Group_ID,o.DT_Rule_Id, o.JIRA_Ticket_ID, '0' TotalNoRules, '0' YTS, '0' In_Progress, '0' Completed,isnull(o.Data_Source_1_Nm,'NA') Agency,isnull(o.Approval_Status,'NA') Approval_Status,isnull(o.Comments,'NA') Description,isnull(o.Override_Release_Dt::varchar,'NA') ReleaseDate,isnull(o.Override_Due_Dt::varchar,'NA') DueDate,isnull(o.Owner,'NA') Owner,isnull(o.Effective_Dt::varchar,'NA') SurveyYear,isnull(o.Override_Version_Num,'NA') Version_Num,isnull(o.Assigned_To,'NA') Assigned_To, isnull(om.User_Defined_Table_Nm, 'NA') User_Defined_Table_Nm, isnull(om.User_Defined_Object_Nm, 'NA') User_Defined_Object_Nm, o.Constructed_SQL, o.Logical_SQL, isnull(o.Override_Type, 'NA') Override_Type, isnull(o.Modified_By, 'NA') Modified_By, isnull(o.Created_By, 'NA') Created_By, isnull(o.Created_Date::varchar, 'NA') Created_Date, isnull(o.Reuse_Override, 'NA') Library, isnull(o.Reuse_Scope, 'NA') Reuse_Scope, o.Target_Table_Nm, OT_Recent.Transaction_Dt, isnull(OT_Recent.Transaction_Cnt::varchar,'0')  Row_Count, OT_Recent.Executed_By, CASE WHEN OT_Recent.Constructed_SQL_Run_Status ILIKE '%Success!' THEN 'Success' ELSE 'Failed' END Status from $$Schema_Name$$.$$Table_Name$$ o left join ( select ot.*,row_number() over (partition by ot.Override_SID order by ot.Transaction_Dt desc) as Transaction_Num from $$Schema_Name$$.$$Transaction_History_Table$$ ot ) OT_Recent on o.Override_SID = OT_Recent.Override_SID and OT_Recent.Transaction_Num = 1 left join $$Schema_Name$$.$$Field_Map_Table$$ om on om.Database_Table_Nm = o.Database_Table_Nm and om.Database_Object_Nm = o.Database_Object_Nm and o.Override_Group = om.Override_Group and o.Target_Schema_Nm = om.Source_Schema_Nm where o.Override_Group in ('$$CoreGroup$$');",
+    "List_Main_Columns_Value_Mapping": {
+      "Icon": "Icon",
+      "ID": "Override_SID",
+      "Rule Name": "Derivation_Name",
+      "Agency": "Agency",
+      "Description": "Description",
+      "Survey Year": "SurveyYear",
+      "Release Date": "ReleaseDate",
+      "Due Date": "DueDate",
+      "Owner": "Owner",
+      "Assigned To": "Assigned_To",
+      "# of Rules": "#_Rules",
+      "YTS": "YTS",
+      "WIP": "In-Progress",
+      "Done": "Completed",
+      "Version#": "Version_Num",
+      "SQL": "SQL"
+    },
+    "List_Group_Columns_Value_Mapping": {
+      "Icon": "Icon",
+      "Action_Btn": "Action_Btn",
+      "Sequence": "Run_Seq_No",
+      "Question ID": "Override_SID",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Owner": "Owner",
+      "Assigned To": "Assigned_To",
+      "Approval Status": "Approval_Status",
+      "Notify Owner": "Notify Owner",
+      "Completion Status": "Completion_Status",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Status": "Status",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "List_Sub_Group_Columns_Value_Mapping": {
+      "Icon": "Icon",
+      "Action_Btn": "Action_Btn",
+      "Sequence": "Run_Seq_No",
+      "Rule ID": "Override_SID",
+      "Rule Name": "Derivation_Name",
+      "Description": "Description",
+      "Target Connection": "Target_Connection_ID",
+      "Target Schema": "Target_Schema_Nm",
+      "Target Table": "Target_Table_UI",
+      "Created By": "Created_By",
+      "Modified By": "Modified_By",
+      "Modified Date": "Modified_Date",
+      "Status": "Status",
+      "Row Count": "Row_Count",
+      "SQL": "SQL"
+    },
+    "Edit_Rule": {
+      "custom_Buttons": {
+        "Custom_Button_1": {
+          "visible": "true",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Transaction History",
+          "btnid": "Custom_Button_1",
+          "tooltip": "View the Transaction History Table using DataGrid",
+          "onclick": "setViewTargtTabl",
+          "onclientclick": "",
+          "background-color": "#655151",
+          "border-color": "",
+          "font-color": "white"
+        },
+        "Custom_Button_2": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Transaction History",
+          "btnid": "Custom_Button_2",
+          "tooltip": "View the Transaction History Table using DataGrid",
+          "onclick": "setViewTargtTabl",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        },
+        "Custom_Button_3": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Transaction History",
+          "btnid": "Custom_Button_3",
+          "tooltip": "View the Transaction History Table using DataGrid",
+          "onclick": "setViewTargtTabl",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        },
+        "Custom_Button_4": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Transaction History",
+          "btnid": "Custom_Button_4",
+          "tooltip": "View the Transaction History Table using DataGrid",
+          "onclick": "setViewTargtTabl",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        }
+      }
+    },
+    "Rules_Group": {
+      "custom_Buttons": {
+        "Custom_Button_1": {
+          "visible": "true",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Transaction History",
+          "btnid": "Custom_Button_1",
+          "tooltip": "View the Transaction History Table using DataGrid",
+          "onclick": "setViewTargtTabl",
+          "onclientclick": "",
+          "background-color": "grey",
+          "border-color": "",
+          "font-color": "white"
+        },
+        "Custom_Button_2": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?SQL=View_Source_Table_SQL&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "View Source Table",
+          "btnid": "Custom_Button_2",
+          "tooltip": "View the Source Table using DataGrid",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        },
+        "Custom_Button_3": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?SQL=View_Target_Table_SQL&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "No",
+          "name": "CustomBtn03",
+          "btnid": "Custom_Button_3",
+          "tooltip": "CustomBtn03",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "green",
+          "border-color": "red",
+          "font-color": "white"
+        },
+        "Custom_Button_4": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?SQL=View_Target_Table_SQL&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "No",
+          "name": "CustomBtn04",
+          "btnid": "CustomBtn04",
+          "tooltip": "CustomBtn04",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        },
+        "Custom_Button_5": {
+          "visible": "false",
+          "URL": "DataTableRule.aspx?SQL=View_Target_Table_SQL&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "No",
+          "name": "CustomBtn05",
+          "btnid": "CustomBtn05",
+          "tooltip": "CustomBtn05",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "",
+          "border-color": "",
+          "font-color": ""
+        }
+      }
+    },
+    "Data_Grid": {
+      "custom_Buttons": {
+        "Custom_Button_1": {
+          "visible": "true",
+          "URL": "DataTableRule.aspx?Data_Grid_Config=View_Transaction_History&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "Approved",
+          "btnid": "Custom_Button_Approved",
+          "tooltip": "Approve the DataGrid Table",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "grey",
+          "border-color": "",
+          "font-color": "white"
+        },
+        "Custom_Button_2": {
+          "visible": "true",
+          "URL": "DataTableRule.aspx?SQL=View_Source_Table_SQL&Override_SID=$$Override_SID$$&page=$$pagetype$$",
+          "popup": "Yes",
+          "name": "Rejected",
+          "btnid": "Custom_Button_Rejected",
+          "tooltip": "Reject the DataGrid Table",
+          "onclick": "",
+          "onclientclick": "",
+          "background-color": "grey",
+          "border-color": "",
+          "font-color": "white"
+        }
+      }
+    },
+    "Security_Sensitivity_Comment": "// 061023 - Implements DML Security for Overrides",
+    "Security_Sensitivity": {
+      "Default_Behavior": "Hide",
+      "Sensitive": {
+        "DML_Oper_To_AD_Group_Mapping": {
+          "View": "dna-override-rating-sec-snstv-view",
+          "Edit": "dna-override-rating-sec-snstv-edit-no",
+          "Delete": "dna-override-rating-sec-snstv-delete",
+          "Run": "dna-override-rating-sec-snstv-run"
+        }
+      }
+    }
+  },
+  "override_tables": {
+    "rules_table": "Override_Rule",
+    "master_table": "Override",
+    "field_map_table": "Override_Object_Map",
+    "transaction_history_table": "Override_Transaction",
+    "override_object_table": "Override_Object",
+    "override_join_table_comment": "// 010323 -- This table (Override_Join) stores the CUSTOM JOINS for a given rule. Make entries in this table if the system generated joins does not meet your needs.",
+    "override_join_table": "Override_Join",
+    "override_object_sort_column": "Target_Object_Sort_Order",
+    "Constructed_SQL_Dev": "Constructed_SQL",
+    "Constructed_SQL_QA": "Constructed_SQL_QA",
+    "Constructed_SQL_Prod": "Constructed_SQL_Prod",
+    "override_workflow_comment": "// 061023",
+    "override_workflow": "Override_Workflow_vw",
+    "override_workflow_table": "Override_Workflow"
+  },
+  "jira_api_call": {
+    "search_all_issues": "https://{{jira_project_url}}/rest/api/3/search?maxResults=1000",
+    "get_issue": "https://{{jira_project_url}}/rest/api/3/issue/{{Issue_ID}}?fields={{Type}}"
+  },
+  "workflow_approval_url": "Service.svc/Approval?accessToken=&&accesstoken$$",
+  "querys": {
+    "select": "select * from $$Schema_Name$$.$$Table_Name$$ order by 1",
+    "select_rules": "select * from $$Schema_Name$$.$$Table_Name$$ order by Sub_Condition_No asc",
+    "select_master": "Select $$Column_Names$$ from $$Schema_Name$$.$$Table_Name$$ WHERE Override_SID = '$$Derivation_ID$$'",
+    "update_status": "update $$Schema_Name$$.$$Table_Name$$ set Constructed_SQL_Test_Status = $$Value$$ where Override_SID = '$$Derivation_ID$$'",
+    "update_constructed_sql": "update $$Schema_Name$$.$$Table_Name$$ set Constructed_SQL = $$Value$$ where Override_SID = '$$Derivation_ID$$'",
+    "update_template": "update $$Schema_Name$$.$$Table_Name$$ set Template_SQL = $$Value$$ where Override_SID = '$$Derivation_ID$$'",
+    "delete_query": "delete from $$Schema_Name$$.$$Table_Name$$ where Override_SID = '$$DervID$$' and $$condition_column$$ = '$$Condition_No$$'",
+    "update_transaction_history_table": "insert into $$Schema_Name$$.$$Table_Name$$ (Override_SID,Transaction_Dt,Template_SQL,Constructed_SQL,Transaction_Cnt,Constructed_SQL_Run_Status,Executed_By,Comments,Transaction_Type,Transaction_Connctn_Details,Transaction_Environment)values($$values$$);",
+    "get_column_datatype": "SELECT data_type_id FROM v_catalog.columns where table_schema = '$$Schema_Name$$' and table_name = '$$Table_Name$$' and column_name = '$$Column_Name$$';",
+    "get_Max_ConfigKey_fromSQL": "SELECT $$RulesKey$$ FROM $$Schema_Name$$.$$Table_Name$$ WHERE $$RulesKey$$ = (SELECT max($$RulesKey$$) FROM $$Schema_Name$$.$$Table_Name$$);",
+    "delete_derivation_fromRT": "DELETE FROM $$Schema_Name$$.$$Table_Name$$ WHERE Override_SID = '$$derivation_id$$';",
+    "delete_derivation_fromMT": "DELETE FROM $$Schema_Name$$.$$Table_Name$$ WHERE Override_SID = '$$derivation_id$$';",
+    "delete_derivation_fromOT": "DELETE FROM $$Schema_Name$$.$$Table_Name$$ WHERE Override_SID = '$$derivation_id$$';",
+    "get_MasterTable_Query": "select $$column_Name$$ from $$Schema_Name$$.$$Table_Name$$ WHERE Override_SID ='$$derivationid$$';",
+    "inser_intoMaster": "insert into $$Schema_Name$$.$$Table_Name$$ ($$ColumnNames&&) values($$values$$);",
+    "update_transcation_template": "UPDATE $$Schema_Name$$.$$Table_Name$$\nSET $$Derivation_Name$$ =\nCASE\n$$WHEN$$\n$$ELSE$$END\n$$JOIN_WHERE_CLAUSE$$\n$$ADVANCED_WHERE$$;",
+    "querytogetdatatype": "SELECT  table_name,column_name,data_type,data_type_id FROM v_catalog.columns WHERE table_schema = '$$Schema_Name$$' AND table_name IN ($$Table_Name$$);",
+    "lastexecuted_derivationhistory": "SELECT $$Column_Names$$ FROM $$Schema_Name$$.$$Table_Name$$ where Override_SID IN ($$Derivation_ID$$) GROUP by Override_SID;",
+    "update_masterTable": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Columns$$ WHERE Override_SID = '$$Derivation_ID$$'",
+    "insert_transformation_rule_master": "INSERT INTO $$Schema_Name$$.$$Table_Name$$ ($$Column_Names$$) VALUES ($$VALUES$$);",
+    "get_max_transformation_rule_seq": "SELECT $$sequence_col_nm$$ from $$Schema_Name$$.$$Table_Name$$ WHERE $$sequence_col_nm$$ = (SELECT max($$sequence_col_nm$$) FROM $$Schema_Name$$.$$Table_Name$$);",
+    "select_transformation_rule_master": "select * from $$Schema_Name$$.$$Table_Name$$ LIMIT 1",
+    "update_transformation_rule_master": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Columns$$ WHERE $$etl_whereclause_columns$$",
+    "select_override_group": "SELECT * from $$Schema_Name$$.$$Table_Name$$ where Override_Group in ($$GroupNm$$)",
+    "select_rules_group": "SELECT * from $$Schema_Name$$.$$Table_Name$$ where Group_ID = ($$Group_ID$$)",
+    "sequence_generator_query": "SELECT sequence_name,identity_table_name  FROM sequences WHERE sequence_schema = '$$Schema_Name$$'",
+    "select_field_map_query": "SELECT * from $$Schema_Name$$.$$Table_Name$$ WHERE Override_Group='$$ds_group_name$$' order by 1",
+    "renameOverride": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET Override_Nm = '$$NewValue$$' WHERE Override_SID = '$$Derivation_ID$$';",
+    "insert_query_gen": "insert into $$Schema_Name$$.$$Table_Name$$ ($$ColumnNames$$) values($$values$$);",
+    "CreateTableSQL": "CREATE TABLE IF NOT EXISTS $$Schema$$.$$Table_NM$$ ($$Columns$$);",
+    "TruncateTableSQL": "Truncate Table $$Schema$$.$$Table_NM$$;",
+    "update_run_sequence_no_MT": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Columns$$ = $$ColumnsValue$$ WHERE Override_SID = '$$Derivation_ID$$'",
+    "MoveUpDown_Update_Sequence_QuerryMT": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Seq_Column$$ = CASE $$Derivation_ID_Column$$ WHEN $$From_Derivation_ID$$ THEN $$To_Seq_No$$ WHEN $$To_Derivation_ID$$ THEN $$From_Seq_No$$ END WHERE $$Derivation_ID_Column$$ IN ($$From_Derivation_ID$$, $$To_Derivation_ID$$)",
+    "Update_Sequence_No_InsertQuerryMT": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Seq_Column$$  = $$Seq_Column$$ + 1 WHERE $$Seq_Column$$ > $$Target_Column_Seq$$ AND $$GroupId_Column$$ = $$Group_Id$$",
+    "Update_Sequence_No_DeleteQuerryMT": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Seq_Column$$  = $$Seq_Column$$ - 1 WHERE $$Seq_Column$$ > $$Target_Column_Seq$$ AND $$GroupId_Column$$ = $$Group_Id$$",
+    "sequence_generatorquery_vertica": "SELECT sequence_name,identity_table_name,sequence_schema  FROM sequences where sequence_schema in ($$transaction_schema$$);",
+    "sequence_generatorquery_oracle": "select sequence_owner AS sequence_schema, sequence_name from all_sequences WHERE sequence_owner IN ($$transaction_schema$$)",
+    "get_next_override_sid": "select NEXTVAL('dna_investment_dm.override_sid_seq') new_override_sid;",
+    "update_group_jiraticket": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Jira_Column$$  = '$$JiraTicketId$$' WHERE Group_ID = '$$Group_ID$$';",
+    "update_group_name": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$OverrideNameColumn$$ = '$$NewGroupName$$',$$OverrideExecuted_By$$='$$ExecutedName$$' WHERE Override_SID = '$$GroupID$$';",
+    "update_run_jiraticket_id": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$OvrrideRuleExecutdJiraIDColmn$$ = '$$JiraTicketId$$' WHERE Override_SID = $Ov_rule_Id$$;",
+    "delete_where_clause": "DELETE FROM $$Schema_Name$$.$$Table_Name$$ WHERE $$ColumnConditions$$",
+    "select_override_group_adv": "select o.Override_SID, o.Override_Nm, isnull(om.User_Defined_Table_Nm, 'NA') User_Defined_Table_Nm, isnull(om.User_Defined_Object_Nm, 'NA') User_Defined_Object_Nm, o.Constructed_SQL, o.Logical_SQL, isnull(o.Override_Type, 'NA') Override_Type, isnull(o.Modified_By, 'NA') Modified_By, isnull(o.Created_By, 'NA') Created_By, isnull(o.Created_Date::varchar, 'NA') Created_Date, isnull(o.Reuse_Override, 'NA') Reuse_Override, isnull(o.Reuse_Scope, 'NA') Reuse_Scope, o.Target_Table_Nm, OT_Recent.Transaction_Dt, OT_Recent.Transaction_Cnt, OT_Recent.Executed_By, OT_Recent.Constructed_SQL_Run_Status from $$Schema_Name$$.$$Table_Name$$ o left join ( select ot.*, row_number() over (partition by ot.Override_SID order by ot.Transaction_Dt desc) as Transaction_Num from $$Schema_Name$$.$$Transaction_History_Table$$ ot ) OT_Recent on o.Override_SID = OT_Recent.Override_SID and OT_Recent.Transaction_Num = 1 left join $$Schema_Name$$.$$Field_Map_Table$$ om on om.Database_Table_Nm = o.Database_Table_Nm and om.Database_Object_Nm = o.Database_Object_Nm and o.Override_Group = om.Override_Group and o.Target_Schema_Nm = om.Source_Schema_Nm where o.Override_Group in ($$GroupNm$$) and o.Override_Type in ('Group', 'Single Rule-I', 'Single Rule-U')",
+    "select_override_group_adv_comment": "This Advanced SQL joins with all related tables (Override, Override_Group, Override_Object_Map, Transaction_History_Table) and prepares the data, eliminates several steps of multiple SQL statments, multiple collections and the related C# processing. This improves performance",
+    "Update_Sequence_GroupRule": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Seq_Column$$ = $$Seq_Value$$  WHERE Override_SID = $$Rule_ID$$;",
+    "rule_move_sql_environment": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$to_env$$ = $$from_env$$  WHERE Override_SID = '$$rule_id$$';",
+    "select_override_groups_comment": "// 123022 -- Retrieves a list of Override Groups. Used in Copy to another Group feature...",
+    "select_override_groups": "select Group_ID from $$Schema_Name$$.$$Table_Name$$ where Override_Type = 'Group';",
+    "select_override_join_comment": "// 010323 Select the CUSTOM JOINS from Override_Join Table. This table stores the CUSTOM JOINS for a given rule. Make entrie in this table if system generated joins does not meet your needs.",
+    "select_override_join": "SELECT SCD_Override_Join_SID, Override_Join_SID, Override_SID, Condition_No, Sub_Condition_No, Join_Type, Join_Table, Join_Table_Col_LH, Equality_Operator, Join_Table_Col_RH, Join_Operator, Sort_Order, Comments, Valid_From_Dt, Valid_To_Dt, Latest_Ind FROM $$Schema_Name$$.$$Table_Name$$ Order By Override_SID, Sort_Order;",
+    "update_data_grid_table": "UPDATE $$Schema_Name$$.$$Table_Name$$ SET $$Columns$$ WHERE $$Where_Condition$$",
+    "insert_data_grid_table": "INSERT INTO $$Schema_Name$$.$$Table_Name$$ ($$Columns$$) VALUES ($$COLUMN_VALUES$$)",
+    "delete_data_grid_table": "DELETE FROM $$Schema_Name$$.$$Table_Name$$ WHERE $$Where_Condition$$",
+    "CopySQL": "COPY $$Schema_Name$$.$$Table_Name$$ FROM LOCAL $$Path$$ DELIMITER E','"
+  },
+  "execute_sql": "yes",
+  "query_operations": {
+    "combine_with": {
+      "AND": "and",
+      "OR": "or"
+    },
+    "operators": {
+      "NOT IN": "NOT IN",
+      "NOT EQUAL TO": "!=",
+      "IN": "IN",
+      "IS": "IS",
+      "IS NOT": "IS NOT",
+      "EQUALS": "=",
+      "<": "<",
+      ">": ">",
+      "<=": "<=",
+      ">=": ">=",
+      "ILIKE": "ILIKE",
+      "LIKE": "LIKE",
+      "NOT LIKE": "NOT LIKE",
+      "NOT ILIKE": "NOT ILIKE"
+    },
+    "aggregate_function": {
+      "AVG": "AVG()",
+      "COUNT": "COUNT()",
+      "MAX": "MAX()",
+      "MIN": "MIN()",
+      "SUM": "SUM()",
+      "ADVANCED": "ADVANCED"
+    },
+    "advance_aggregate_function": {
+      "AVG": "AVG()",
+      "COUNT": "COUNT()",
+      "MAX": "MAX()",
+      "MIN": "MIN()",
+      "SUM": "SUM()",
+      "MEDIAN": "MEDIAN()",
+      "ROW_NUMBER": "ROW_NUMBER()",
+      "RANK": "RANK()",
+      "VARIANCE": "VARIANCE()",
+      "LAG": "LAG()",
+      "LEAD": "LEAD()"
+    }
+  },
+  "newDerivationID": "6863250001",
+  "DatatypeCollections": {
+    "General_Types": {
+      "Integer_Values": [
+        "integer",
+        "numeric",
+        "float",
+        "real",
+        "double",
+        "decimal",
+        "number",
+        "money"
+      ],
+      "String_Values": [
+        "char",
+        "varchar"
+      ],
+      "DateTime_Values": [
+        "date",
+        "time",
+        "timestamp",
+        "interval",
+        "datetime"
+      ],
+      "Boolean_Values": [
+        "boolean"
+      ],
+      "Geographic_Values": [
+        "geometry",
+        "geography",
+        "uuid"
+      ],
+      "Binary_Values": [
+        "binary",
+        "varbinary"
+      ]
+    }
+  },
+  "Image_folder_path": "http://localhost:2645/Images/",
+  "Database_Config": {
+    "Oracle": {
+      "connection_template": {
+        "env": "",
+        "vendor_name": "Oracle",
+        "host": "",
+        "port": "",
+        "service_name": "",
+        "user": "",
+        "password": "",
+        "ssl": false,
+        "Rules_Schema_Name": "dna_investment_dm",
+        "transaction_schema_name": {
+          "dna_investment_dm": "Dm"
+        },
+        "db_provider": "Oracle.ManagedDataAccess.Client",
+        "conn_string": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$$host$$)(PORT=$$port$$)) (CONNECT_DATA=(SERVICE_NAME=$$service_name$$))); User Id=$$user$$;Password=$$password$$;",
+        "field_map_sql": "",
+        "all_table_columns_sql": "select TABLE_NAME,COLUMN_NAME,DATA_TYPE from all_tab_columns WHERE OWNER in ($$transaction_schema_name$$) order by table_name",
+        "Use_Columns_with_Same_Name_in_Joins": false
+      },
+      "create_connection_fields_names": {
+        "vendor_name": "Oracle",
+        "host": "Host",
+        "port": "Port",
+        "service_name": "Serivce Name",
+        "user": "Username",
+        "password": "Password",
+        "ssl": "SSL"
+      },
+      "data_types": {
+        "String": {
+          "CHAR": "",
+          "VARCHAR2": "50",
+          "NCHAR": "",
+          "NVARCHAR2": ""
+        },
+        "Date": {
+          "DATE": "MM-DD-YYYY"
+        },
+        "DateTime": {
+          "TIMESTAMP": ""
+        },
+        "Int64": {
+          "NUMBER": "38, 18"
+        },
+        "Double": {
+          "FLOAT": "",
+          "BINARY_FLOAT": "",
+          "BINARY_DOUBLE": ""
+        }
+      },
+      "DateFormat": "dd-MMM-yyyy",
+      "auto_quote_data_types": {
+        "quote": [
+          "CHAR",
+          "VARCHAR2",
+          "NCHAR",
+          "NVARCHAR2",
+          "DATE",
+          "TIMESTAMP"
+        ],
+        "unquote": [
+          "NUMBER",
+          "FLOAT",
+          "BINARY_FLOAT",
+          "BINARY_DOUBLE"
+        ]
+      },
+      "over_clause_params": {
+        "over_clause": "OVER",
+        "partition_by": "PARTITION BY",
+        "order_by": "ORDER BY"
+      },
+      "dummy_from_clause": "FROM dual"
+    },
+    "Vertica": {
+      "connection_template": {
+        "env": "",
+        "vendor_name": "Vertica",
+        "host": "",
+        "port": "",
+        "user": "",
+        "password": "",
+        "database": "",
+        "ssl": false,
+        "Rules_Schema_Name": "dna_investment_dm",
+        "transaction_schema_name": {
+          "dna_investment_dm": "Dm"
+        },
+        "db_provider": "Oracle.ManagedDataAccess.Client",
+        "conn_string": "",
+        "field_map_sql": "SELECT column_id Override_Object_Map_SID, column_name User_Defined_Object_Nm, column_name Database_Object_Nm, 'Field' Object_Type, table_name User_Defined_Table_Nm, table_name Database_Table_Nm FROM v_catalog.columns c where table_schema = '$$Schema_Name$$' and table_name not in (select distinct Database_Table_Nm from $$Schema_Name$$.Override_object_Map) union select to_char(Override_Object_Map_SID) Override_Object_Map_SID, User_Defined_Object_Nm, Database_Object_Nm, Object_Type, User_Defined_Table_Nm, Database_Table_Nm from $$Schema_Name$$.Override_object_Map",
+        "all_table_columns_sql": "SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM v_catalog.columns WHERE table_schema in ($$transaction_schema_name$$) order by column_name",
+        "Use_Columns_with_Same_Name_in_Joins": false
+      },
+      "create_connection_fields_names": {
+        "vendor_name": "Vertica",
+        "host": "Host",
+        "port": "Port",
+        "service_name": "Database",
+        "user": "Username",
+        "password": "Password",
+        "ssl": "SSL"
+      },
+      "data_types": {
+        "BigInt": "",
+        "Binary": "",
+        "Bit": "",
+        "Char": "",
+        "Date": "",
+        "DateTime": "",
+        "Double": "",
+        "IntervalDay": "",
+        "IntervalDayToHour": "",
+        "IntervalDayToMinute": "",
+        "IntervalDayToSecond": "",
+        "IntervalHour": "",
+        "IntervalHourToMinute": "",
+        "IntervalHourToSecond": "",
+        "IntervalMinute": "",
+        "IntervalMinuteToSecond": "",
+        "IntervalMonth:": "",
+        "IntervalSecond": "",
+        "IntervalYear": "",
+        "IntervalYearToMonth": "",
+        "LongVarBinary": "",
+        "LongVarChar": "",
+        "Numeric": "",
+        "Time": "",
+        "Timestamp": "",
+        "TimestampTz": "",
+        "TimeTz": "",
+        "VarBinary": "",
+        "VarChar": ""
+      },
+      "auto_quote_data_types": {
+        "quote": [
+          "char",
+          "varchar",
+          "date",
+          "datetime",
+          "timestamp",
+          "time"
+        ],
+        "unquote": [
+          "integer",
+          "numeric",
+          "float",
+          "real",
+          "double",
+          "decimal",
+          "number"
+        ]
+      },
+      "over_clause_params": {
+        "over_clause": "OVER",
+        "partition_by": "PARTITION BY",
+        "order_by": "ORDER BY"
+      },
+      "dummy_from_clause": ""
+    }
+  },
+  "Email_Format_HTML": {
+    "CARRY_VALUE_VARIANCE": {
+      "Conditional_Highlight": {
+        "Operator": "NOT_EQUAL_TO",
+        "value": "0",
+        "Color": "Red",
+        "Scope": "Background"
+      },
+      "Thousand_Separator": "Yes",
+      "Font_Style": "Bold",
+      "Font_Size": "12",
+      "Field_Alignment": "Right",
+      "Column_Width": "20",
+      "Column_Width_Unit": "Percent",
+      "BG": null,
+      "Color": "Green"
+    },
+    "ALTERNATIVE_SECTION_HEADER": {
+      "Effective_Date EQUALS 2020-06-30": "13 Month Reconciliations",
+      "Effective_Date EQUALS 2020-09-30": "select 'Running 13 Month Reconciliations - AS OF: ' || CURRENT_DATE",
+      "Effective_Date EQUALS 2020-07-30": "select 'Rolling 13 month metrics - EFFECTIVE DATE Range from '||(ADD_MONTHS(trunc(INPUT_FILE_CYCLE_DT::DATE), -13))|| ' to '|| INPUT_FILE_CYCLE_DT FROM dna_investment_dm.INVESTMENT_DATE_STG;"
+    }
+  },
+  "API_Allow_IP_List": {
+    "183.82.251.43": "",
+    "183.82.251.60": "",
+    "192.168.0.117": ""
+  }
+}

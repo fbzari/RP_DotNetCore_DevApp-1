@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@page
+@model RP_DotNetCore_DevApp.Models.DataGridModel
+@{
+    ViewBag.Title = "Data Grid";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Data Grid Features:</h2>
+<ejs-grid id="MasterDataGrid" dataSource="((System.Data.DataTable)ViewBag.datasource)"
+          allowPaging="true"
+          allowSorting="true"
+          allowResizing="true"
+          allowFiltering="true"
+          allowGrouping="true"
+          toolbar="(ViewBag.DG_button_Options)">
+          <e-grid-columns>
+        @foreach (var EachColumn in ViewBag.DG_DataColumn)
+        {
+            <e-grid-column field="@EachColumn.ToString()" headerText="@EachColumn.ToString()" isPrimaryKey="false" textAlign="Right" width="120"></e-grid-column>
+        }
+    </e-grid-columns>
+    <e-grid-editSettings allowAdding="(ViewBag.allowAdding)" allowDeleting="(ViewBag.allowDeleting)" allowEditing="(ViewBag.allowEditing)" mode="Batch"></e-grid-editSettings>
+   
+    <e-grid-pagesettings pageCount="12"></e-grid-pagesettings>
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings> @*
+    <e-grid-selectionsettings type="Multiple"></e-grid-selectionsettings>
+    <e-grid-groupsettings showDropArea="false" columns="@(new string[] { "CustomerID"})"></e-grid-groupsettings>
+    <e-grid-columns>
+        <e-grid-column field="OrderID" headerText="Order ID" isPrimaryKey="true" textAlign="Right" width="120"></e-grid-column>
+        <e-grid-column field="CustomerID" headerText="Customer ID" width="140"></e-grid-column>
+        <e-grid-column field="Freight" headerText="Freight" textAlign="Right" format="C2" width="120"></e-grid-column>
+        <e-grid-column field="ShipCountry" headerText="Ship Country" width="140"></e-grid-column>
+    </e-grid-columns>
+    <e-grid-aggregates>
+        <e-grid-aggregate>
+            <e-aggregate-columns>
+                <e-aggregate-column field="Freight" type="Sum" groupFooterTemplate="Total units: ${Sum}"></e-aggregate-column>
+                <e-aggregate-column field="Verified" type="Truecount" groupFooterTemplate="Verified: ${Truecount}"></e-aggregate-column>
+                <e-aggregate-column field="Freight" type="Max" groupCaptionTemplate="Maximum: ${Max}"></e-aggregate-column>
+            </e-aggregate-columns>
+        </e-grid-aggregate>
+    </e-grid-aggregates> *@
+</ejs-grid>
