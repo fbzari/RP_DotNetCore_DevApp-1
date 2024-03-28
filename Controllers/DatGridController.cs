@@ -11,6 +11,7 @@ using Vertica.Data.VerticaClient;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RP_DotNetCore_DevApp.Models;
 using System.Data;
+using System.Drawing;
 
 
 namespace RP_DotNetCore_DevApp.Controllers
@@ -83,10 +84,46 @@ namespace RP_DotNetCore_DevApp.Controllers
 
             ViewBag.datasource = masterDt;
             //viewModel.
+            JObject datagridConfig = myJObject.SelectToken("$.rating.Data_Grid_Config.PeopleData").Value<JObject>();
 
+            List<DataGridsModel> dataGrids = GetDataSource(datagridConfig,_VConn);
+            ViewBag.DataGrids = GetDataSource(datagridConfig, _VConn);
             // Need to Get the values from the Config--
-            return View(viewModel);
+            return View(dataGrids);
 
+        }
+
+        private List<DataGridsModel> GetDataSource(JObject DataGridConfig,VerticaConnection __VConn)
+        {
+            List<DataGridsModel> datagrids = new List<DataGridsModel>();
+
+            foreach (var dataGrid in DataGridConfig) {
+
+                var singleGrid = new DataGridsModel();
+                singleGrid.id = dataGrid.Key;
+                JObject gridProp = dataGrid.Value as JObject;
+                Execute_Manager executeManager = new Execute_Manager();
+                String selectQuery = gridProp["DML_SQL"].ToString();
+                string tableName = gridProp["targetTableName"].ToString();
+                string curSchema = gridProp["SchemaName"].ToString();
+
+                selectQuery = selectQuery.Replace("$$Schema_Name$$", curSchema).Replace("$$Limit$$", "");
+                DataTable dataTable = executeManager.getTableDataSet(__VConn, selectQuery, tableName);
+                singleGrid.DataSource = dataTable;
+
+                //int rowNum = gridProp["RowNum"] == null ? 1 : Convert.ToInt32(gridProp["RowNum"]);
+                int rowNum = Convert.ToInt32(gridProp["RowNum"] ?? 1);
+                singleGrid.dataColumns = dataTable.Columns;
+
+                JArray settingsArray = (JArray)gridProp["Data_Grid_CRUD_Settings"];
+                List<string> toolbarItems = settingsArray.ToObject<List<string>>();
+                singleGrid.toolBarItems = toolbarItems;
+                singleGrid.rowNum = rowNum;
+                datagrids.Add(singleGrid);
+                
+            }
+
+            return datagrids;
         }
     }
 }

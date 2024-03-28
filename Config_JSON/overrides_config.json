@@ -1730,148 +1730,249 @@
       "SMTP_Enable_SSL": "true"
     },
     "Data_Grid_Config": {
-      "General_Config": {
-        "General_Config_Comment": "// 081023 Added Data_Grid_Date_Format & Data_Grid_Decimal_Format",
-        "Data_Grid_Date_Format": "dd-MM-yyyy",
-        "Data_Grid_Decimal_Format": "N2",
-        "Numeric_Col_Align": "Right"
-      },
-      "ApprovalButton": {
-        "ApprovalButton": {
+      "PeopleData": {
+        "People": {
           "RowNum": "1",
+          "Title": "Peple Detail data",
+          "Export_type": "csv",
+          "Page_Size": "10",
+          "Edit_Mode": "Inline",
+          "Show_Confirm_Dialog": "false",
+          "Allow_Filtering": "true",
+          "Allow_Sorting": "true",
+          "Allow_CustomFilter": "true",
+          "TargetShowSQLID": "14375000001",
+          "Allow_Links": "true",
           "Data_Grid_CRUD_Settings": [
             "add",
             "edit",
             "delete",
             "update",
-            "cancel"
+            "cancel",
+            "excelExport",
+            "pdfExport",
+            "wordExport"
           ],
-          "DML_SQL": "SELECT $$columnName$$ FROM $$Schema_Name$$.$$TableName$$;",
-          "SchemaName": "dna_investment_dm"
-        }
-      },
-      "DIM_PARTY": {
-        "DIM_PARTY_12": {
-          "RowNum": "1",
-          "Data_Grid_CRUD_Settings": [
-            "add",
-            "edit",
-            "delete",
-            "update",
-            "cancel"
-          ],
-          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT, PARTY_CATEGORY_CDE, PARTY_TYPE_CDE, PARTY_COUNTRY, CARRY_VALUE FROM $$Schema_Name$$.DIM_PARTY;",
-          "targetTableName": "DIM_PARTY",
-          "primaryKeyColumn": "PARTY_ID",
-          "SchemaName": "dna_investment_dm",
-          "whereCondition": "PARTY_ID = @PARTY_ID",
-          "ColumnHeaderText": {
-            "PARTY_ID": "PARTY ID",
-            "EFFECTIVE_DT": "EFFECTIVE DT",
-            "Industry_Sector_Txt": "Industry Sector",
-            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
-          },
+          "Initial_Row_Load": "100",
+          "DML_SQL": "SELECT Id_User, First_Name, Sex, Phone, User_Id, Email, Last_Name, Date_of_birth, Job_title, CarryVal FROM $$Schema_Name$$.PeopleData $$Limit$$;",
+          "DML_SQL_For_Drilldown": "SELECT Id_User, First_Name, Sex, Phone, User_Id, Email, Last_Name, Date_of_birth, Job_title , CarryVal FROM $$Schema_Name$$.PeopleData $$WhereClause$$ $$Limit$$;",
+          "targetTableName": "PeopleData",
+          "Connection_Env": "dev",
+          "Connection_Id": "Invst_Vertica_Eagle_DM",
+          "primaryKeyColumn": [ "Id_User", "First_Name" ],
+          "SchemaName": "Override",
+          "whereCondition": "Id_User = @Id_User",
+          "ReadOnlyColumns": {},
+          "ColumnHeaderText": {},
           "Link_Columns": {
-            "PARTY_CATEGORY_CDE": {
-              "ConfigLink": "DIM_PARTY",
-              "Where_condition_Column": [
-                "PARTY_ID"
-              ],
-              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            "DML_Links": {
+              "type": "UpdateOperation",
+              "Visible": "Yes",
+              "Text": "DML Operation",
+              "DML_Operation": "INSERT INTO Override.PeopleData_Dup (Id_User, First_Name, User_Id) VALUES ($$Id_User$$,$$First_Name$$,$$User_Id$$);"
+            },
+            "DrillLinkPopup": {
+              "DrillLinkPopup_Comment": "// 060224 [**] DrillDown Link Enh Added the New Key on the Link Columns and need to mention the type as type =>[DrillLinkPopup]",
+              "type": "DrillLinkPopup",
+              "Visible": "Yes",
+              "targetGridId": "Dim_Party_Drill_Link",
+              "Text": "Check Asset"
+            },
+            "ConfigLink": "DIM_PARTY_UPDATE",
+            "Adjustments": "DIM_PARTY_UPDATE",
+            "Variance": "DIM_PARTY_UPDATE",
+            "showSQL": {
+              "Visible": "Yes",
+              "Text": "Show SQL"
             }
-          }
+          },
+          "IsGrouping": "true",
+          "GroupingSummary_Comments": "Grouping referred from the Syncfsuion Library for, NOTE1: For [Format] Supports c# String Format, NOTE2: for [SummaryType] Supports ['SUM', 'AVG', 'MAX', 'MIN', 'COUNT', ]",
+          "DefaultGrouping": [ "Id_User", "First_Name" ],
+          "ColumnFormat": {
+            "Date_of_birth": "yyyy/MM/dd"
+          },
+          "Date_of_birth": null,
+          "GroupingSummary": {
+            "1": {
+              "SummaryType": "SUM",
+              "DisplayColumn": "Id_User",
+              "Format": "{0:C}",
+              "DataMember": "DataMember",
+              "Prefix": "TOTAL = "
+            }
+          },
+          "HeaderGroup": {},
+          "Default_Column_Value": {
+            "PARTY_ID": "sequence~~Override.my_seq.sample1",
+            "EFFECTIVE_DT": "SQL~~SELECT GETDATE();",
+            "PARTY_CATEGORY_CDE": "static~~defaultvalueCDE"
+          },
+          "ColumnWidth": {
+            "comments": "Note: all width are measured in em values"
+          },
+          "DrillDownFilterObj_Comment": "DrillDownFilterObj added the this New Section for the Multiple Datagrid Filter on the Row Link",
+          "Detailed_Grid": "Target_People",
+          "DrillDownfromDb": "false",
+          "DrillDownFilterObj": {
+            "1": {
+              "DrillDownFilterColumns": {
+                "First_Name": "equal",
+                "Sex": "equal"
+              },
+              "DrillDownFilterOperator": "equals",
+              "DrillDownFilterTargetGridKey": "Target_People",
+              "Limit_val": "200"
+            },
+            "2": {
+              "DrillDownFilterColumns": {
+                "First_Name": "equal"
+              },
+              "DrillDownFilterOperator": "equals",
+              "DrillDownFilterTargetGridKey": "Target_People_Joins",
+              "Limit_val": "200"
+            }
+          },
+          "LinkDrillDownPopup_Comment": "// 060224 [**] DrillDown Link Enh Added the new Key LinkDrillDownPopup Flag if it is Yes It will open a Popup",
+          "LinkDrillDownPopup": "yes",
+          "CheckBox_Comment": "// 021921 [#*] If Checkbox Yes , Checkbox Configure to Grid ",
+          "CheckBox": "no"
         },
-        "DIM_PARTY_1": {
-          "RowNum": "2",
-          "Data_Grid_CRUD_Settings": [
-            "add",
-            "edit",
-            "delete",
-            "update",
-            "cancel"
-          ],
-          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT FROM $$Schema_Name$$.DIM_PARTY;",
-          "targetTableName": "DIM_PARTY",
-          "primaryKeyColumn": "PARTY_ID",
-          "SchemaName": "dna_investment_dm",
-          "whereCondition": "PARTY_ID = @PARTY_ID",
-          "ColumnHeaderText": {
-            "PARTY_ID": "PARTY ID",
-            "EFFECTIVE_DT": "EFFECTIVE DT",
-            "Industry_Sector_Txt": "Industry Sector",
-            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
-          },
-          "Link_Columns": {
-            "PARTY_CATEGORY_CDE": {
-              "ConfigLink": "DIM_PARTY",
-              "Where_condition_Column": [
-                "PARTY_ID"
-              ],
-              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
-            }
-          }
-        },
-        "DIM_PARTY_2": {
-          "RowNum": "2",
-          "Data_Grid_CRUD_Settings": [
-            "add",
-            "edit",
-            "delete",
-            "update",
-            "cancel"
-          ],
-          "DML_SQL": "SELECT PARTY_ID, PARTY_CATEGORY_CDE FROM $$Schema_Name$$.DIM_PARTY;",
-          "targetTableName": "DIM_PARTY",
-          "primaryKeyColumn": "PARTY_ID",
-          "SchemaName": "dna_investment_dm",
-          "whereCondition": "PARTY_ID = @PARTY_ID",
-          "ColumnHeaderText": {
-            "PARTY_ID": "PARTY ID",
-            "EFFECTIVE_DT": "EFFECTIVE DT",
-            "Industry_Sector_Txt": "Industry Sector",
-            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
-          },
-          "Link_Columns": {
-            "PARTY_CATEGORY_CDE": {
-              "ConfigLink": "DIM_PARTY",
-              "Where_condition_Column": [
-                "PARTY_ID"
-              ],
-              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
-            }
-          }
-        }
-      },
-      "DIM_PARTY_UPDATE": {
-        "DIM_PARTY": {
+        "Target_People": {
+          "Title": "People Target data",
+          "DynamicTitle": "People Target data For $$ColumnName$$ $$Value$$",
           "RowNum": "1",
+          "Export_type": "csv",
+          "Page_Size": "10",
+          "Edit_Mode": "Inline",
+          "Show_Confirm_Dialog": "false",
+          "Allow_Filtering": "true",
+          "Allow_Sorting": "true",
+          "Allow_CustomFilter": "true",
+          "Allow_Links": "true",
+          "TargetShowSQLID": "14375000001",
           "Data_Grid_CRUD_Settings": [
             "add",
             "edit",
             "delete",
             "update",
-            "cancel"
+            "cancel",
+            "excelExport",
+            "pdfExport",
+            "wordExport"
           ],
-          "DML_SQL": "SELECT PARTY_ID, EFFECTIVE_DT, PARTY_CATEGORY_CDE, PARTY_TYPE_CDE, PARTY_COUNTRY, CARRY_VALUE FROM $$Schema_Name$$.DIM_PARTY WHERE PARTY_COUNTRY = 'Nepal';",
-          "targetTableName": "DIM_PARTY",
-          "primaryKeyColumn": "PARTY_ID",
-          "SchemaName": "dna_investment_dm",
-          "whereCondition": "PARTY_ID = @PARTY_ID",
-          "ColumnHeaderText": {
-            "PARTY_ID": "PARTY ID",
-            "EFFECTIVE_DT": "EFFECTIVE DT",
-            "Industry_Sector_Txt": "Industry Sector",
-            "PARTY_CATEGORY_CDE": "PARTY_CATEGORY_CDE"
+          "Initial_Row_Load": "100",
+          "DML_SQL": "SELECT Id_User, First_Name, Sex, Phone FROM $$Schema_Name$$.PeopleData $$Limit$$;",
+          "DML_SQL_For_Drilldown": "SELECT Id_User, First_Name, Sex, Phone FROM $$Schema_Name$$.PeopleData $$WhereClause$$ $$Limit$$;",
+          "targetTableName": "PeopleData",
+          "primaryKeyColumn": [ "Id_User", "First_Name" ], // 031824 Code [#*] structure updated to support multiple column.
+          "SchemaName": "Override",
+          "whereCondition": "Id_User = @Id_User",
+          "ReadOnlyColumns": {},
+          "Default_Column_Value": {
+            "PARTY_ID": "sequence~~Override.my_seq.sample1",
+            "CARRY_VALUE": "SQL~~SELECT GETDATE();",
+            "PARTY_TYPE_CDE": "static~~defaultvalueCDE",
+            "PARTY_COUNTRY": "static~~defaultvaluecountry"
           },
+          "ColumnHeaderText": {},
           "Link_Columns": {
-            "PARTY_CATEGORY_CDE": {
-              "ConfigLink": "DIM_PARTY",
-              "Where_condition_Column": [
-                "PARTY_ID"
-              ],
-              "SelectColumns": "select PARTY_ID, EFFECTIVE_DT from $$TableName$$"
+            "showSQL": {
+              "Visible": "Yes",
+              "Text": "Show SQL"
+            },
+            "Adjustments": "DIM_PARTY_UPDATE",
+            "Variance": "DIM_PARTY_UPDATE",
+            "ConfigLink": "DIM_PARTY_UPDATE",
+            "DML_Links": {
+              "type": "UpdateOperation",
+              "Visible": "Yes",
+              "Text": "DML Operation",
+              "DML_Operation": "INSERT INTO Override.PeopleData_Dup (Id_User, First_Name, User_Id) VALUES ($$Id_User$$,$$First_Name$$,$$User_Id$$);"
+            },
+            "DrillLinkPopup": {
+              "DrillLinkPopup_Comment": "// 060224 [**] DrillDown Link Enh Added the New Key on the Link Columns and need to mention the type as type =>[DrillLinkPopup]",
+              "type": "DrillLinkPopup",
+              "Visible": "Yes",
+              "targetGridId": "Dim_Party_Drill_Link",
+              "Text": "Check Asset"
             }
-          }
+          },
+          "IsGrouping": "true",
+          "GroupingSummary_Comments": "Grouping referred from the Syncfsuion Library for, NOTE1: For [Format] Supports c# String Format, NOTE2: for [SummaryType] Supports ['SUM', 'AVG', 'MAX', 'MIN', 'COUNT', ]",
+          "DefaultGrouping": [ "Id_User", "First_Name" ],
+          "ColumnFormat": {},
+          "GroupingSummary": {
+            "1": {
+              "SummaryType": "SUM",
+              "DisplayColumn": "Total_Cost",
+              "Format": "{0:C}",
+              "DataMember": "DataMember",
+              "Prefix": "TOTAL = "
+            }
+          },
+          "HeaderGroup": {}
+        },
+        "Target_People_Joins": {
+          "Title": "People Target Join",
+          "DynamicTitle": "People Target Join For $$ColumnName$$ $$Value$$",
+          "RowNum": "2",
+          "Export_type": "csv",
+          "Page_Size": "10",
+          "Edit_Mode": "Inline",
+          "Show_Confirm_Dialog": "false",
+          "Allow_Filtering": "true",
+          "Allow_Sorting": "true",
+          "Allow_CustomFilter": "true",
+          "TargetShowSQLID": "11219250000",
+          "Allow_Links": "true",
+          "Data_Grid_CRUD_Settings": [
+            "add",
+            "edit",
+            "delete",
+            "update",
+            "cancel",
+            "excelExport",
+            "pdfExport",
+            "wordExport"
+          ],
+          "Initial_Row_Load": "100",
+          "DML_SQL": "SELECT pd.First_Name, pd.Last_Name, ld.amount FROM Override.PeopleData pd INNER JOIN Override.Loan_Details ld ON pd.Id_User = ld.account_id;",
+          "DML_SQL_For_Drilldown": "SELECT pd.First_Name, pd.Last_Name, ld.amount FROM Override.PeopleData pd INNER JOIN Override.Loan_Details ld ON pd.Id_User = ld.account_id $$WhereClause$$ $$Limit$$;",
+          "targetTableName": "PeopleData",
+          "primaryKeyColumn": [ "Id_User", "First_Name" ],
+          "SchemaName": "Override",
+          "whereCondition": "Id_User = @Id_User and First_Name=@First_Name",
+          "ReadOnlyColumns": {},
+          "Default_Column_Value": {
+            "PARTY_ID": "sequence~~Override.my_seq.sample1",
+            "CARRY_VALUE": "SQL~~SELECT GETDATE();",
+            "PARTY_TYPE_CDE": "static~~defaultvalueCDE",
+            "PARTY_COUNTRY": "static~~defaultvaluecountry"
+          },
+          "ColumnHeaderText": {},
+          "Link_Columns": {
+            "showSQL": {
+              "Visible": "Yes",
+              "Text": "Show SQL"
+            },
+            "ConfigLink": "DIM_PARTY_UPDATE",
+            "Adjustments": "DIM_PARTY_UPDATE"
+          },
+          "IsGrouping": "true",
+          "GroupingSummary_Comments": "Grouping referred from the Syncfsuion Library for, NOTE1: For [Format] Supports c# String Format, NOTE2: for [SummaryType] Supports ['SUM', 'AVG', 'MAX', 'MIN', 'COUNT', ]",
+          "DefaultGrouping": [ "Id_User", "First_Name" ],
+          "ColumnFormat": {},
+          "GroupingSummary": {
+            "1": {
+              "SummaryType": "SUM",
+              "DisplayColumn": "amount",
+              "Format": "{0:C}",
+              "DataMember": "DataMember",
+              "Prefix": "TOTAL = "
+            }
+          },
+          "HeaderGroup": {}
         }
       }
     },
