@@ -12,13 +12,13 @@ namespace RP_DotNetCore_DevApp.Controllers
     [ApiController]
     public class PivotController : ControllerBase
     {
-        [HttpGet(Name = "GetPivotData")]
-        public object Get()
+        [HttpGet("{tableName}")]
+        public object Get(string tableName)
         {
-            return JsonConvert.SerializeObject(GetPivotData());
+            return JsonConvert.SerializeObject(GetPivotData(tableName));
         }
 
-        public dynamic GetPivotData()
+        public dynamic GetPivotData(string tableName)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace RP_DotNetCore_DevApp.Controllers
                 string db_password = myJObject.SelectToken("$.override_connection_details.password").Value<string>();
                 string ssl_flag = myJObject.SelectToken("$.override_connection_details.ssl").Value<string>();
 
-                string query = "SELECT * FROM Override.PivotData;";
+                string query = $"SELECT * FROM Override.{tableName};";
                 VerticaConnection _VConn = Connection_Manager.Create_Vertica_Connection(db_host, db_database, int.Parse(db_port), db_user, db_password, bool.Parse(ssl_flag));
                 _VConn.Open();
                 VerticaCommand cmd = new VerticaCommand(query, _VConn);

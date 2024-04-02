@@ -94,66 +94,85 @@
     var datagrids = ViewBag.DataGrids;
 }
 
+
 <div id="container" class="m-1">
-    <h2>Pivot Table :</h2>
-
-    <ejs-pivotview id="PivotView" height="300" showGroupingBar="true">
-        <e-datasourcesettings Url="https://localhost:7051/api/Pivot" enableSorting="true" allowLabelFilter="true" allowValueFilter="true">
-            <e-rows>
-                <e-field name="Country"></e-field>
-                <e-field name="Products"></e-field>
-            </e-rows>
-            <e-columns>
-                <e-field name="Year" caption="Year"></e-field>
-                <e-field name="Quarter"></e-field>
-            </e-columns>
-            <e-values>
-                <e-field name="Sold" caption="Units Sold"></e-field>
-                <e-field name="Amount" caption="Sold Amount"></e-field>
-            </e-values>
-        </e-datasourcesettings>
-    </ejs-pivotview>
-
-</div>
-
-<div id="container" class="m-1" >
     <h2>Data Grid Features:</h2>
     @if (datagrids != null)
     {
         foreach (var gridModel in datagrids)
         {
+
+
             <div class="container m-1">
                 <div class="row">
 
                     @foreach (var grid in gridModel.Value)
                     {
-                        <div class="col-@(12 / (gridModel.Value.Count))">
-                            <h5>@(grid.Title)</h5>
-                            <ejs-grid id="@grid.id" dataSource="@grid.DataSource"
-                                      allowPaging="true"
-                                      allowSorting="true"
-                                      allowResizing="true"
-                                      allowFiltering="true"
-                                      allowGrouping="true"
-                                      toolbar="@grid.toolBarItems"
-                                      beforeBatchSave="actionComplete">
-                                <e-grid-columns>
-                                    @foreach (DataColumn column in grid.dataColumns)
-                                    {
-                                        bool primaryKey = grid.primaryKeyColumn.Contains(column.ColumnName);
-                                        <e-grid-column field="@column.ColumnName" headerText="@column.ColumnName" all isPrimaryKey="@primaryKey" allowEditing="@(primaryKey ? false : true)" textAlign="Right" width="120"></e-grid-column>
-                                    }
-                                </e-grid-columns>
-                                <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Batch"></e-grid-editSettings>
+                        if (grid.pivotTable)
+                        {
+                            var url = $"https://localhost:7051/api/Pivot/{grid.TableName}";
+                            <div id="container" class="m-1">
+                                <h5>@(grid.Title)</h5>
+                                <ejs-pivotview id="@grid.id" height="500" showGroupingBar="true">
+                        
+                                    <e-datasourcesettings Url=@url enableSorting="true" allowLabelFilter="true" allowValueFilter="true">
+                                        <e-rows>
+                                            @foreach (var item in grid.rows)
+                                            {
+                                                <e-field name="@item["name"]"></e-field>
+                                            }
+                                        </e-rows>
+                                        <e-columns>
+                                            @foreach (var item in grid.columns)
+                                            {
+                                                <e-field name="@item["name"]" caption="@item["caption"]"></e-field>
+                                            }
+                                        </e-columns>
+                                        <e-values>
+                                            @foreach (var item in grid.values)
+                                            {
+                                                <e-field name="@item["name"]" caption="@item["caption"]"></e-field>
+                                            }
+                                        </e-values>
+                                    </e-datasourcesettings>
+                                </ejs-pivotview>
 
-                                <e-grid-pagesettings pageCount="12"></e-grid-pagesettings>
-                                <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
-                            </ejs-grid>
-                        </div>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="col-@(12 / (gridModel.Value.Count))">
+                                <h5>@(grid.Title)</h5>
+                                <ejs-grid id="@grid.id" dataSource="@grid.DataSource"
+                                          allowPaging="true"
+                                          allowSorting="true"
+                                          allowResizing="true"
+                                          allowFiltering="true"
+                                          allowGrouping="true"
+                                          toolbar="@grid.toolBarItems"
+                                          beforeBatchSave="actionComplete">
+                                    <e-grid-columns>
+                                        @foreach (DataColumn column in grid.dataColumns)
+                                        {
+                                            bool primaryKey = grid.primaryKeyColumn.Contains(column.ColumnName);
+                                            <e-grid-column field="@column.ColumnName" headerText="@column.ColumnName" all isPrimaryKey="@primaryKey" allowEditing="@(primaryKey ? false : true)" textAlign="Right" width="120"></e-grid-column>
+                                        }
+                                    </e-grid-columns>
+                                    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Batch"></e-grid-editSettings>
+
+                                    <e-grid-pagesettings pageCount="12"></e-grid-pagesettings>
+                                    <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+                                </ejs-grid>
+                            </div>
+
+                        }
                     }
 
                 </div>
             </div>
+
+
         }
     }
     else

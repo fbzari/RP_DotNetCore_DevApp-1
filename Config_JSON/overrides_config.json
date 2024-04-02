@@ -1976,7 +1976,8 @@
         },
         "PivotTable": {
           "Title": "Bike Sales Data",
-          "RowNum": "2",
+          "PivotTable": true,
+          "RowNum": "3",
           "DML_SQL": "SELECT Sold, Amount, Country, Products, Year, Quarter FROM $$Schema_Name$$.PivotData;",
           "targetTableName": "PivotData",
           "SchemaName": "Override",
@@ -1994,7 +1995,8 @@
               "caption": "Year"
             },
             "Quarter": {
-              "name": "Quarter"
+              "name": "Quarter",
+              "caption": "Quarter"
             }
           },
           "values": {
@@ -2008,7 +2010,54 @@
             }
           }
 
+        },
+        "PivotTable_2": {
+          "Title": "Sales Funnel CRM Data",
+          "PivotTable": true,
+          "RowNum": "4",
+          "DML_SQL": "SELECT * FROM  Override.Sales_funnel_CRM;",
+          "targetTableName": "Sales_funnel_CRM",
+          "SchemaName": "Override",
+          "rows": {
+            "Company": {
+              "name": "Company"
+            },
+            "Product": {
+              "name": "Product"
+            }
+          },
+          "columns": {
+            "Account_Manager": {
+              "name": "Account_Manager",
+              "caption": "Account_Manager"
+            },
+            "Contact": {
+              "name": "Contact",
+              "caption": "Contact"
+            },
+            "Status": {
+              "name": "Status",
+              "caption": "Status"
+            }
+
+          },
+          "values": {
+            "Account_Number": {
+              "name": "Account_Number",
+              "caption": "Account_Number"
+            },
+            "Licenses": {
+              "name": "Licenses",
+              "caption": "Licenses"
+            },
+            "Sale_Price": {
+              "name": "Sale_Price",
+              "caption": "Sale_Price"
+            }
+          }
+
         }
+
       }
     },
     "SQL_Macro": {

@@ -114,6 +114,7 @@ namespace RP_DotNetCore_DevApp.Controllers
                 String selectQuery = gridProp?["DML_SQL"]?.ToString() ?? "";
                 string tableName = gridProp?["targetTableName"]?.ToString()??"";
                 string curSchema = gridProp?["SchemaName"]?.ToString()??"";
+                singleGrid.TableName = tableName;
 
                 selectQuery = selectQuery.Replace("$$Schema_Name$$", curSchema).Replace("$$Limit$$", "");
                 DataTable dataTable = executeManager.getTableDataSet(__VConn, selectQuery, tableName);
@@ -129,11 +130,80 @@ namespace RP_DotNetCore_DevApp.Controllers
 
                 List<string> primaryKeyArray = gridProp["primaryKeyColumn"]?.ToObject<List<string>>() ?? new List<string>();
 
+                bool pivotTable = gridProp["PivotTable"]?.Value<bool>() ?? false;
+               
+                if (pivotTable)
+                {
+                   
+                    singleGrid.pivotTable = pivotTable;
+
+                    List<JObject> rowslist = new List<JObject>();
+                    List<JObject> columnsList = new List<JObject>();
+                    List<JObject> valuesList = new List<JObject>();
+
+                    JToken rowsToken = gridProp["rows"];
+                    if (rowsToken != null && rowsToken.HasValues)
+                    {
+                        foreach (JProperty property in rowsToken.Children<JProperty>())
+                        {
+                            // Construct a new JObject containing all the properties of the current object
+                            JObject obj = new JObject();
+                            foreach (JProperty childProperty in property.Value.Children<JProperty>())
+                            {
+                                obj.Add(childProperty.Name, childProperty.Value);
+                            }
+                            rowslist.Add(obj);
+                        }
+                    }
+
+
+                    JToken columnsToken = gridProp["columns"];
+                    if (columnsToken != null && columnsToken.HasValues)
+                    {
+                        foreach (JProperty property in columnsToken.Children<JProperty>())
+                        {
+                            // Construct a new JObject containing all the properties of the current object
+                            JObject obj = new JObject();
+                            foreach (JProperty childProperty in property.Value.Children<JProperty>())
+                            {
+                                obj.Add(childProperty.Name, childProperty.Value);
+                            }
+                            columnsList.Add(obj);
+                        }
+                    }
+
+                    JToken valuesToken = gridProp["values"];
+                    if (valuesToken != null && valuesToken.HasValues)
+                    {
+                        foreach (JProperty property in valuesToken.Children<JProperty>())
+                        {
+                            // Construct a new JObject containing all the properties of the current object
+                            JObject obj = new JObject();
+                            foreach (JProperty childProperty in property.Value.Children<JProperty>())
+                            {
+                                obj.Add(childProperty.Name, childProperty.Value);
+                            }
+                            valuesList.Add(obj);
+                        }
+                    }
+
+                    singleGrid.rows = rowslist;
+                    singleGrid.columns = columnsList;
+                    singleGrid.values = valuesList;
+
+
+                }
+                else
+                {
+                    singleGrid.pivotTable = pivotTable;
+                }
+                
 
                 singleGrid.toolBarItems = toolbarItems;
                 singleGrid.primaryKeyColumn = primaryKeyArray;
                 singleGrid.rowNum = rowNum;
                 singleGrid.Title = title;
+                
                 
                 if (datagrids.ContainsKey(rowNum))
                 {
