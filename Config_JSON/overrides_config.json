@@ -1973,6 +1973,41 @@
             }
           },
           "HeaderGroup": {}
+        },
+        "PivotTable": {
+          "Title": "Bike Sales Data",
+          "RowNum": "2",
+          "DML_SQL": "SELECT Sold, Amount, Country, Products, Year, Quarter FROM $$Schema_Name$$.PivotData;",
+          "targetTableName": "PivotData",
+          "SchemaName": "Override",
+          "rows": {
+            "Country": {
+              "name": "Country"
+            },
+            "Products": {
+              "name": "Products"
+            }
+          },
+          "columns": {
+            "Year": {
+              "name": "Year",
+              "caption": "Year"
+            },
+            "Quarter": {
+              "name": "Quarter"
+            }
+          },
+          "values": {
+            "Sold": {
+              "name": "Sold",
+              "caption": "Units Sold"
+            },
+            "Amount": {
+              "name": "Amount",
+              "caption": "Sold Amount"
+            }
+          }
+
         }
       }
     },

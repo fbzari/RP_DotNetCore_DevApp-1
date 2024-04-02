@@ -29,6 +29,7 @@ namespace RP_DotNetCore_DevApp
         public void Configure(IApplicationBuilder app)
         {
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
             // Configure
@@ -47,6 +48,7 @@ namespace RP_DotNetCore_DevApp
             //    .AddScheme<AuthenticationSchemeOptions, LdapAuthenticationHandler>("Ldap", options => { });
 
             // Other ConfigureServices code...
+            services.AddSession();
         }
     }
 }
