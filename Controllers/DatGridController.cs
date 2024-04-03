@@ -36,7 +36,7 @@ namespace RP_DotNetCore_DevApp.Controllers
             String myJsonString = System.IO.File.ReadAllText(config_file);
             JObject myJObject = JObject.Parse(myJsonString);
             VerticaConnection _VConn = null;
-
+            HttpContext.Session.SetString("ConfigFile", myJObject.ToString());
             var viewModel = new DataGridModel();
 
 
