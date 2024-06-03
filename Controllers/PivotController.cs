@@ -23,11 +23,18 @@ namespace RP_DotNetCore_DevApp.Controllers
             try
             {
                 // Get the Overrides Config file.
-                string config_path = Path.Combine(Config.root_path, Config.config_path);
-                string config_file = Path.Combine(config_path, Config.config_file);
-                String myJsonString = System.IO.File.ReadAllText(config_file);
+                //string config_path = Path.Combine(Config.root_path, Config.config_path);
+                //string config_file = Path.Combine(config_path, Config.config_file);
+                //String myJsonString = System.IO.File.ReadAllText(config_file);
                 //JObject myJObject = JObject.Parse(myJsonString);
                 string config = HttpContext.Session.GetString("ConfigFile") ?? "";
+
+                if (string.IsNullOrEmpty(config))
+                {
+                   dynamic errorMsg = new JObject();
+                    errorMsg["Error"] = "Access Denied";
+                    return errorMsg;
+                }
                 JObject myJObject = JObject.Parse(config);
 
                 string db_host = myJObject.SelectToken("$.override_connection_details.host").Value<string>();
